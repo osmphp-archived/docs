@@ -8,7 +8,9 @@
         }
     },
     "require": {
-        "php": ">=7.1"
+        "php": ">=7.1",
+        "dubysa/framework": ">=0.3",
+        "michelf/php-markdown": "1.8.*"
     },
     "extra": {
         "dubysa": {

@@ -34,6 +34,7 @@ class File extends Object_
     const TAG_PATTERN = "/{{\\s*(?<tag>[^ }]*)(?<args>.*)}}/u";
     const ARG_PATTERN = "/(?<key>[a-z0-9_]+)\\s*=\\s*\"(?<value>[^\"]*)\"/u";
     const ID_PATTERN = "/#(?<id>[^ ]+)/u";
+    const LINK_PATTERN = "/\\[(?<title>[^\\]]+)\\]\\((?<url>[^\\)]+)\\)/u";
     const CHARS_BEING_REPLACED = [
         // characters listed below when found in SEOified text are replaced by SEO friendly characters from
         // REPLACEMENTS array. For example, ' ' ir replaced with '-'

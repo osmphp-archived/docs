@@ -26,8 +26,12 @@ class UrlGenerator extends Object_
     }
 
     public function generateUrl($filename) {
+        return  $this->base_url . $this->generateRelativeUrl($filename);
+    }
+
+    public function generateRelativeUrl($filename) {
         $filename = mb_substr($filename, mb_strlen($this->doc_root) + 1);
-        $result = $this->base_url;
+        $result = '';
 
         foreach (explode('/', str_replace("\\", '/', $filename)) as $part) {
             $result .= '/';
@@ -39,5 +43,4 @@ class UrlGenerator extends Object_
         }
         return $result;
     }
-
 }

@@ -38,12 +38,12 @@ class File extends Object_
     const CHARS_BEING_REPLACED = [
         // characters listed below when found in SEOified text are replaced by SEO friendly characters from
         // REPLACEMENTS array. For example, ' ' ir replaced with '-'
-        ' ', '\\',
+        ' ', '\\', '/',
 
         // characters listed below when found in SEOified text are ignored, i.e. not put into generated URL
-        '`', '"', '\'', '(', ')', '.', ',', '?',
+        '`', '"', '\'', '(', ')', '.', ',', '?', '!',
     ];
-    const REPLACEMENTS = ['-', '-'];
+    const REPLACEMENTS = ['-', '-', '-'];
 
     protected function default($property) {
         global $m_app; /* @var App $m_app */

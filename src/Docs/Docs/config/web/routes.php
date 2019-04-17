@@ -4,16 +4,10 @@ use Manadev\Docs\Docs\Controllers\Web;
 use Manadev\Framework\Http\Parameters;
 
 return [
-    'GET /show' => [
+    'GET /__books/pages/' => [
         'class' => Web::class,
         'method' => 'show',
         'public' => true,
-        'seo' => true,
-        'parameters' => [
-            'page' => [
-                'class' => Parameters\String_::class,
-                'required' => true,
-            ],
-        ],
+        'abstract' => true,
     ],
 ];

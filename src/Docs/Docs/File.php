@@ -2,10 +2,8 @@
 
 namespace Manadev\Docs\Docs;
 
-use Manadev\Docs\Docs\Hints\SettingsHint;
 use Manadev\Core\App;
 use Manadev\Core\Object_;
-use Manadev\Framework\Settings\Settings;
 use Michelf\MarkdownExtra;
 
 /**
@@ -16,8 +14,6 @@ use Michelf\MarkdownExtra;
  * @property string $original_text @required @part
  * @property string[] $parent_pages @required @part
  *
- * @property Settings|SettingsHint $settings @required
- * @property string $doc_root @required
  * @property string $base_url @required
  * @property string $public_path @required
  * @property Module $module @required
@@ -25,6 +21,7 @@ use Michelf\MarkdownExtra;
  * @property TagRenderer $tag_renderer @required
  * @property TypeConverter $type_converter @required
  * @property UrlGenerator $url_generator @required
+ * @property Book $book @required
  */
 class File extends Object_
 {
@@ -55,8 +52,6 @@ class File extends Object_
             case 'html': return MarkdownExtra::defaultTransform($this->text);
             case 'parent_pages': return $this->getParentPages();
 
-            case 'settings': return $m_app->settings;
-            case 'doc_root': return $this->settings->doc_root;
             case 'base_url': return $m_app->request->base;
             case 'public_path': return $m_app->path($m_app->public_path);
             case 'module': return $m_app->modules['Manadev_Docs_Docs'];
@@ -64,6 +59,7 @@ class File extends Object_
             case 'tag_renderer': return $m_app[TagRenderer::class];
             case 'type_converter': return $m_app[TypeConverter::class];
             case 'url_generator': return $m_app[UrlGenerator::class];
+            case 'book': return $this->module->book;
         }
         return parent::default($property);
     }
@@ -137,7 +133,7 @@ class File extends Object_
     protected function generateImageTargetFilename($imageUrl) {
         $result = $this->public_path . '/images';
 
-        $path = mb_substr(dirname($this->name), mb_strlen($this->doc_root));
+        $path = mb_substr(dirname($this->name), mb_strlen($this->book->file_path));
         $path = str_replace('\\', '/', $path);
 
         // first element is removed as it is always empty
@@ -231,7 +227,7 @@ class File extends Object_
         }
         $path = dirname($path);
 
-        for (; mb_strlen($path) >= mb_strlen($this->doc_root); $path = dirname($path)) {
+        for (; mb_strlen($path) >= mb_strlen($this->book->file_path); $path = dirname($path)) {
             $filename = "{$path}/index.md";
             if (!is_file($filename)) {
                 continue;

@@ -29,7 +29,7 @@ class UrlGenerator extends Object_
     public function generateUrl($filename) {
         return  $this->http_url_generator->rawUrl(
             'GET ' . $this->book->url_path . $this->generateRelativeUrl($filename),
-            $this->http_url_generator->generateQuery('GET /__books/pages/'));
+            $this->http_url_generator->generateQuery('GET /_books/page'));
     }
 
     public function generateRelativeUrl($filename) {

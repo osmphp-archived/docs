@@ -8,7 +8,7 @@ use Manadev\Framework\Views\View;
 /**
  * @property File $file @required
  */
-class DocPage extends View
+class Html extends View
 {
-    public $template = 'Manadev_Docs_Docs.doc_page';
+    public $template = 'Manadev_Docs_Docs.html';
 }

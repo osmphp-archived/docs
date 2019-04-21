@@ -36,7 +36,7 @@ trait DetectRouteTrait
 
             $module->file = $file;
 
-            return Web::new(['route' => '/_books/page', 'method' => 'show', 'public' => true], null,
+            return Web::new(['route' => '/_books/page', 'method' => 'bookPage', 'public' => true], null,
                 $m_app->area_->controllers);
         }
     }

@@ -24,13 +24,11 @@ class Web extends Controller
         return parent::default($property);
     }
 
-    public function show() {
-        return m_layout([
-            '@include' => 'base',
-            '#page' => [
-                'title' => $this->file->title,
-                'content' => DocPage::new(['file' => $this->file]),
-            ],
+    public function bookPage() {
+        return m_layout('books_page', [
+            '#page' => ['title' => $this->file->title],
+            '#breadcrumbs' => ['file' => $this->file],
+            '#html' => ['file' => $this->file],
         ]);
     }
 }

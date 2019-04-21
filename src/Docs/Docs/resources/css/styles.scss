@@ -13,7 +13,13 @@
 //
 //}
 
-.markdown {
+.breadcrumbs {
+  font: 16px/1.5 "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+.html {
+  font: 16px/1.5 "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+
   a, code {
     overflow-wrap: break-word;
     word-break: break-all;
@@ -58,6 +64,10 @@
 
   blockquote code {
     color: black;
+  }
+
+  img {
+    border: 1px solid #021a40;
   }
 
   .icons {

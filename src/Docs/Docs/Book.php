@@ -10,6 +10,7 @@ use Manadev\Core\Object_;
  *
  * @see \Manadev\DocHost\Books\Module:
  *      @property int $id @required @part
+ *      @property int $customer @required @part
  */
 class Book extends Object_
 {

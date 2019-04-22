@@ -13,6 +13,10 @@ use Manadev\Framework\Http\Advices\DetectRoute;
  */
 class Module extends BaseModule
 {
+    public $hard_dependencies = [
+        'Manadev_Ui_Aba',
+    ];
+
     public $traits = [
         DetectRoute::class => Traits\DetectRouteTrait::class,
     ];

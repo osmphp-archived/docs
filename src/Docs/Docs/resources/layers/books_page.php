@@ -10,6 +10,7 @@ return [
         'modifier' => '-books-page',
         'content' => Container::new([
             'id' => 'content',
+            'modifier' => 'page-section',
             'views' => [
                 'breadcrumbs' => Breadcrumbs::new(['id' => 'breadcrumbs']),
                 'main' => Html::new(['id' => 'html']),

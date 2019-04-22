@@ -1,24 +1,10 @@
-//@import './_normalize.scss';
-//
-//* {
-//  box-sizing: border-box;
-//}
-//
-//img {
-//  border: 1px solid #021a40;
-//}
-//
-//body {
-//  font: 16px/1.5 "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-//
-//}
-
 .breadcrumbs {
   font: 16px/1.5 "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
 .html {
   font: 16px/1.5 "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  padding: 8px;
 
   a, code {
     overflow-wrap: break-word;

@@ -25,6 +25,10 @@ class FileFinder extends Object_
         return parent::default($property);
     }
 
+    /**
+     * @param string $pageUrl
+     * @return File
+     */
     public function findFile($pageUrl) {
         global $m_profiler; /* @var Profiler $m_profiler */
 

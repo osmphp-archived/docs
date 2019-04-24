@@ -23,6 +23,10 @@ trait DetectRouteTrait
             $module = $m_app->modules['Manadev_Docs_Docs']; /* @var Module $module */
             $request = $m_app->request;
 
+            if ($request->method != 'GET') {
+                throw $e;
+            }
+
             if (!($book = $bookDetector->detectBook())) {
                 throw $e;
             }

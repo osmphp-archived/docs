@@ -1,13 +1,18 @@
 @import '~Manadev_Ui_Aba/_variables-and-mixins.scss';
 @import './_variables.scss';
 
-.breadcrumbs,
+.breadcrumbs__items,
 .html {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   line-height: $line-height--base;
 }
 
 .breadcrumbs {
+  display: flex;
+
+  &__items {
+    flex-grow: 1;
+  }
 }
 
 .html {

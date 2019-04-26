@@ -7,7 +7,11 @@ use Manadev\Core\Object_;
 use Michelf\MarkdownExtra;
 
 /**
- * @property string $name @required @part File name of this documentation page
+ * @property string $name @required @part File name of this book page
+ * @property bool $directory @part If true, it means content file down't exist, but directory with child pages
+ *      does exist
+ * @property string $redirect @part If not-empty, means that file does exist but URL should be different (most often
+ *      there is extra '/')
  * @property string $title @required @part
  * @property string $html @required @part
  * @property string $text @required @part
@@ -47,7 +51,9 @@ class File extends Object_
 
         switch ($property) {
             case 'title': return $this->getTitle();
-            case 'original_text': return file_get_contents($this->name);
+            case 'original_text': return $this->directory
+                ? '# ' . basename($this->name). '#'
+                : file_get_contents($this->name);
             case 'text': return $this->transform($this->original_text);
             case 'html': return MarkdownExtra::defaultTransform($this->text);
             case 'parent_pages': return $this->getParentPages();

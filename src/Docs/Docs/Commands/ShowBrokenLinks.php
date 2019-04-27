@@ -3,7 +3,7 @@
 namespace Manadev\Docs\Docs\Commands;
 
 use Manadev\Core\App;
-use Manadev\Docs\Docs\File;
+use Manadev\Docs\Docs\Page;
 use Manadev\Docs\Docs\FileFinder;
 use Manadev\Docs\Docs\UrlGenerator;
 use Manadev\Framework\Console\Command;
@@ -61,7 +61,7 @@ class ShowBrokenLinks extends Command
         $this->filename_rendered = false;
         foreach (explode("\n", file_get_contents($filename)) as $lineNo => $line) {
             $this->line_no = $lineNo;
-            if (preg_match_all(File::LINK_PATTERN, $line, $match)) {
+            if (preg_match_all(Page::LINK_PATTERN, $line, $match)) {
                 foreach ($match['url'] as $url) {
                     $this->checkUrl($url);
                 }

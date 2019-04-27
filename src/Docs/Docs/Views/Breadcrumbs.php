@@ -2,12 +2,12 @@
 
 namespace Manadev\Docs\Docs\Views;
 
-use Manadev\Docs\Docs\File;
+use Manadev\Docs\Docs\Page;
 use Manadev\Framework\Views\View;
 use Manadev\Ui\Menus\Views\Menu;
 
 /**
- * @property File $file @required
+ * @property Page $page @required
  * @property Menu $menu @part
  */
 class Breadcrumbs extends View

@@ -1,10 +1,10 @@
 <?php
 /* @var \Manadev\Docs\Docs\Views\Breadcrumbs $view */
 ?>
-@if (count($view->file->parent_pages) || count($view->menu->items_))
+@if (count($view->page->parent_pages) || count($view->menu->items_))
     <div class="breadcrumbs">
         <nav class="breadcrumbs__items">
-            @foreach ($view->file->parent_pages as $url => $title)
+            @foreach ($view->page->parent_pages as $url => $title)
                 <a href="{{ $url }}">{{ $title }}</a>
                 @if (!$loop->last) &gt; @endif
             @endforeach

@@ -4,7 +4,7 @@ namespace Manadev\Docs\Docs\Controllers;
 
 use Manadev\Core\App;
 use Manadev\Docs\Docs\Book;
-use Manadev\Docs\Docs\File;
+use Manadev\Docs\Docs\Page;
 use Manadev\Docs\Docs\Module;
 use Manadev\Framework\Http\Controller;
 use Manadev\Framework\Http\Responses;
@@ -12,7 +12,7 @@ use Manadev\Framework\Http\UrlGenerator;
 
 /**
  * @property Module $module @required
- * @property File $file @required
+ * @property Page $page @required
  * @property Responses $responses @required
  * @property UrlGenerator $url_generator @required
  * @property Book $book @required
@@ -24,7 +24,7 @@ class Web extends Controller
 
         switch ($property) {
             case 'module': return $m_app->modules['Manadev_Docs_Docs'];
-            case 'file': return $this->module->file;
+            case 'page': return $this->module->page;
             case 'responses': return $m_app[Responses::class];
             case 'url_generator': return $m_app->url_generator;
             case 'book': return $this->module->book;
@@ -33,16 +33,16 @@ class Web extends Controller
     }
 
     public function bookPage() {
-        if ($this->file->redirect) {
+        if ($this->page->redirect) {
             return $this->responses->redirect($this->url_generator->rawUrl(
-                'GET ' . $this->book->url_path . $this->file->redirect,
+                'GET ' . $this->book->url_path . $this->page->redirect,
                 $this->request->query));
         }
 
         return m_layout('books_page', [
-            '#page' => ['title' => $this->file->title],
-            '#breadcrumbs' => ['file' => $this->file],
-            '#html' => ['file' => $this->file],
+            '#page' => ['title' => $this->page->title],
+            '#breadcrumbs' => ['page' => $this->page],
+            '#html' => ['page' => $this->page],
         ]);
     }
 }

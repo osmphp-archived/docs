@@ -27,7 +27,7 @@ class FileFinder extends Object_
 
     /**
      * @param string $pageUrl
-     * @return File
+     * @return Page
      */
     public function findFile($pageUrl) {
         global $m_profiler; /* @var Profiler $m_profiler */
@@ -47,11 +47,11 @@ class FileFinder extends Object_
             $path = $this->findFileInDirectory($path, $part, $found);
 
             if ($found) {
-                return File::new(['name' => $path, 'redirect' => $redirect]);
+                return Page::new(['name' => $path, 'redirect' => $redirect]);
             }
 
             if (is_dir($path)) {
-                return File::new(['name' => $path, 'redirect' => $redirect, 'directory' => true]);
+                return Page::new(['name' => $path, 'redirect' => $redirect, 'directory' => true]);
             }
 
             return null;
@@ -98,7 +98,7 @@ class FileFinder extends Object_
             }
 
             // page URL doesn't end with configured suffix '/' or '.html'. Don't do anything to URL and tell the
-            // system to redirect to same URL with added suffix if file will be found
+            // system to redirect to same URL with added suffix if page will be found
             return $pageUrl . $suffix;
         }
 

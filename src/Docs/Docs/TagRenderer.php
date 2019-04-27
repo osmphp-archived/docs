@@ -11,7 +11,7 @@ use Manadev\Core\Object_;
  *
  * @property UrlGenerator $url_generator @required
  *
- * @property File $file @temp
+ * @property Page $page @temp
  * @property Tag $tag @temp
  * @property string $text @temp
  * @property array $args @temp
@@ -28,14 +28,14 @@ class TagRenderer extends Object_
     }
 
     /**
-     * @param File $file
+     * @param Page $page
      * @param Tag $tag
      * @param string $text
      * @param array $args
      * @return string
      */
-    public function render(File $file, Tag $tag, $text, $args) {
-        $this->file = $file;
+    public function render(Page $page, Tag $tag, $text, $args) {
+        $this->page = $page;
         $this->tag = $tag;
         $this->text = $text;
         $this->args = $args;
@@ -51,7 +51,7 @@ class TagRenderer extends Object_
     protected function renderToc() {
         $result = "\n";
         foreach (explode("\n", $this->text) as $line) {
-            if (!preg_match(File::HEADER_PATTERN, $line, $match)) {
+            if (!preg_match(Page::HEADER_PATTERN, $line, $match)) {
                 continue;
             }
 
@@ -68,7 +68,7 @@ class TagRenderer extends Object_
                 continue;
             }
 
-            if (!preg_match(File::ID_PATTERN, $match['attributes'], $idMatch)) {
+            if (!preg_match(Page::ID_PATTERN, $match['attributes'], $idMatch)) {
                 continue;
             }
 
@@ -82,11 +82,20 @@ class TagRenderer extends Object_
     }
 
     protected function renderChildPages() {
-        if (basename($this->file->name) != 'index.md') {
+        if ($this->page->directory) {
+            return $this->renderChildPagesFromDirectory($this->page->name);
+        }
+
+        if (basename($this->page->name) == 'index.md') {
+            return $this->renderChildPagesFromDirectory(dirname($this->page->name));
+        }
+
+        $path = mb_substr($this->page->name, 0, mb_strlen($this->page->name) - mb_strlen('.md'));
+        if (!is_dir($path)) {
             return '';
         }
 
-        return $this->renderChildPagesFromDirectory(dirname($this->file->name));
+        return $this->renderChildPagesFromDirectory($path);
     }
 
     protected function renderChildPagesFromDirectory($path, $depth = 0) {
@@ -113,17 +122,15 @@ class TagRenderer extends Object_
     protected function findChildPages($path) {
         $result = [];
 
+        $directories = [];
+
         foreach (new \DirectoryIterator($path) as $fileInfo) {
             if ($fileInfo->isDot()) {
                 continue;
             }
 
             if ($fileInfo->isDir()) {
-                $filename = "{$fileInfo->getPathname()}/index.md";
-                if (is_file($filename)) {
-                    $file = File::new(['name' => $filename]);
-                    $result[$file->name] = $file->title;
-                }
+                $directories[$fileInfo->getPathname()] = $fileInfo->getFilename();
                 continue;
             }
 
@@ -135,9 +142,19 @@ class TagRenderer extends Object_
                 continue;
             }
 
-            $file = File::new(['name' => $fileInfo->getPathname()]);
-            $result[$file->name] = $file->title;
+            $page = Page::new(['name' => $fileInfo->getPathname()]);
+            $result[$page->name] = $page->title;
         }
-        return $result;
+
+        foreach (array_keys($directories) as $directory) {
+            foreach (array_keys($result) as $filename) {
+                if (preg_match("/(\\d+-)?" . preg_quote(basename($directory)) . "\\.md/u", basename($filename))) {
+                    unset($directories[$directory]);
+                    break;
+                }
+            }
+        }
+
+        return array_merge($result, $directories);
     }
 }

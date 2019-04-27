@@ -8,9 +8,9 @@ use Michelf\MarkdownExtra;
 
 /**
  * @property string $name @required @part File name of this book page
- * @property bool $directory @part If true, it means content file down't exist, but directory with child pages
+ * @property bool $directory @part If true, it means content page down't exist, but directory with child pages
  *      does exist
- * @property string $redirect @part If not-empty, means that file does exist but URL should be different (most often
+ * @property string $redirect @part If not-empty, means that page does exist but URL should be different (most often
  *      there is extra '/')
  * @property string $title @required @part
  * @property string $html @required @part
@@ -26,8 +26,9 @@ use Michelf\MarkdownExtra;
  * @property TypeConverter $type_converter @required
  * @property UrlGenerator $url_generator @required
  * @property Book $book @required
+ * @property FileFinder $finder @required
  */
-class File extends Object_
+class Page extends Object_
 {
     const H1_PATTERN = "/^#\\s*(?<title>[^#{]+)/u";
     const HEADER_PATTERN = "/^(?<depth>#+)\\s*(?<title>[^#{\\r\\n]+)#*[ \\t]*(?:{(?<attributes>[^}\\r\\n]*)})?\\r?$/mu";
@@ -52,7 +53,7 @@ class File extends Object_
         switch ($property) {
             case 'title': return $this->getTitle();
             case 'original_text': return $this->directory
-                ? '# ' . basename($this->name). '#'
+                ? "# " . basename($this->name). "#\n\n{{ child_pages depth=\"1\" }}\n"
                 : file_get_contents($this->name);
             case 'text': return $this->transform($this->original_text);
             case 'html': return MarkdownExtra::defaultTransform($this->text);
@@ -66,6 +67,7 @@ class File extends Object_
             case 'type_converter': return $m_app[TypeConverter::class];
             case 'url_generator': return $m_app[UrlGenerator::class];
             case 'book': return $this->module->book;
+            case 'finder': return $m_app[FileFinder::class];
         }
         return parent::default($property);
     }
@@ -227,20 +229,24 @@ class File extends Object_
     protected function getParentPages() {
         $result = [];
 
-        $path = $this->name;
-        if (basename($path) == 'index.md') {
-            $path = dirname($path);
+        $path = mb_substr($this->name, mb_strlen("{$this->book->file_path}/"));
+        if ($path == "index.md") {
+            return $result;
         }
-        $path = dirname($path);
+
+        if (is_file("{$this->book->file_path}/index.md")) {
+            $page = $this->finder->findFile("{$this->book->file_path}/index.md");
+            $result[$this->url_generator->generateUrl($page->name)] =
+                $page->directory ? basename($page->name) : $page->title;
+        }
+
+        $parts = explode('/', str_replace('\\', '/', dirname($this->name)));
+        foreach (array_keys($path) as $i) {
+        }
 
         for (; mb_strlen($path) >= mb_strlen($this->book->file_path); $path = dirname($path)) {
-            $filename = "{$path}/index.md";
-            if (!is_file($filename)) {
-                continue;
-            }
-
-            $file = File::new(['name' => $filename]);
-            $result[$this->url_generator->generateUrl($filename)] = $file->title;
+            $page = $this->finder->findFile($path);
+            $result[$this->url_generator->generateUrl($filename)] = $page->title;
         }
 
         return array_reverse($result);

@@ -35,11 +35,11 @@ trait DetectRouteTrait
             $module->book = $book;
 
             $filePath = mb_substr($request->route, mb_strlen($book->url_path));
-            if (!($file = $fileFinder->findFile($filePath))) {
+            if (!($page = $fileFinder->findFile($filePath))) {
                 throw $e;
             }
 
-            $module->file = $file;
+            $module->page = $page;
 
             return Web::new(['route' => '/_books/page', 'method' => 'bookPage', 'public' => true], null,
                 $m_app->area_->controllers);

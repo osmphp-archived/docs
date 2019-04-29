@@ -27,6 +27,7 @@ use Manadev\Framework\Http\UrlGenerator as HttpUrlGenerator;
  * @property string $html @required @part
  * @property string $text @required @part
  * @property string $original_text @required @part
+ * @property int $level @required @part
  *
  * @property Page $parent_page
  * @property Page[] $parent_pages @required
@@ -84,6 +85,7 @@ class Page extends Object_
                 : file_get_contents($this->filename);
             case 'text': return $this->transform($this->original_text);
             case 'html': return MarkdownExtra::defaultTransform($this->text);
+            case 'level': return $this->getLevel();
             case 'parent_page': return $this->getParentPage();
             case 'parent_pages': return $this->getParentPages();
             case 'sibling_pages': return $this->getSiblingPages();
@@ -330,5 +332,15 @@ class Page extends Object_
         }
 
         return $this->parent_page->child_pages;
+    }
+
+    protected function getLevel() {
+        $result = 0;
+
+        for ($parentPage = $this->parent_page; $parentPage != null; $parentPage = $parentPage->parent_page) {
+            $result++;
+        }
+
+        return $result;
     }
 }

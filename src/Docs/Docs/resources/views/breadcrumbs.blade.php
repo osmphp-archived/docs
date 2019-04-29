@@ -4,8 +4,8 @@
 @if (count($view->page->parent_pages) || count($view->menu->items_))
     <div class="breadcrumbs">
         <nav class="breadcrumbs__items">
-            @foreach ($view->page->parent_pages as $url => $title)
-                <a href="{{ $url }}">{{ $title }}</a>
+            @foreach ($view->page->parent_pages as $page)
+                <a href="{{ $page->url }}">{{ $page->title }}</a>
                 @if (!$loop->last) &gt; @endif
             @endforeach
         </nav>

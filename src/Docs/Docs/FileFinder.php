@@ -47,11 +47,11 @@ class FileFinder extends Object_
             $path = $this->findFileInDirectory($path, $part, $found);
 
             if ($found) {
-                return Page::new(['name' => $path, 'redirect' => $redirect]);
+                return Page::new(['file_name' => $path, 'redirect' => $redirect]);
             }
 
             if (is_dir($path)) {
-                return Page::new(['name' => $path, 'redirect' => $redirect, 'directory' => true]);
+                return Page::new(['file_name' => $path, 'redirect' => $redirect, 'directory' => true]);
             }
 
             return null;

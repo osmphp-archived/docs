@@ -4,19 +4,35 @@ namespace Manadev\Docs\Docs;
 
 use Manadev\Core\App;
 use Manadev\Core\Object_;
+use Manadev\Framework\Http\Request;
 use Michelf\MarkdownExtra;
+use Manadev\Framework\Http\UrlGenerator as HttpUrlGenerator;
 
 /**
- * @property string $name @required @part File name of this book page
- * @property bool $directory @part If true, it means content page down't exist, but directory with child pages
- *      does exist
- * @property string $redirect @part If not-empty, means that page does exist but URL should be different (most often
- *      there is extra '/')
+ * Properties applicable to all page types
+ *
+ * @property string $name @required @part URL relative to book URL domain and path
+ * @property Book $parent @required
+ *
+ * Properties applicable only to REDIRECT type:
+ *
+ * @property string $redirect_to @part If not-empty, means that page does exist but URL should be different
+ *      (most often there is extra '/')
+ * @property string $redirect_to_url
+ *
+ * Properties applicable to PAGE and PLACEHOLDER types:
+ *
+ * @property string $filename @required @part File name of this book page
  * @property string $title @required @part
  * @property string $html @required @part
  * @property string $text @required @part
  * @property string $original_text @required @part
- * @property string[] $parent_pages @required @part
+ *
+ * @property Page $parent_page
+ * @property Page[] $parent_pages @required
+ * @property Page[] $sibling_pages @required
+ * @property Page[] $child_pages @required
+ * @property string $url @required
  *
  * @property string $base_url @required
  * @property string $public_path @required
@@ -24,12 +40,24 @@ use Michelf\MarkdownExtra;
  * @property Tags|Tag[] $tags @required
  * @property TagRenderer $tag_renderer @required
  * @property TypeConverter $type_converter @required
- * @property UrlGenerator $url_generator @required
- * @property Book $book @required
+ * @property HttpUrlGenerator $url_generator @required
  * @property FileFinder $finder @required
+ * @property Request $request @required
  */
 class Page extends Object_
 {
+    // types
+    const PAGE = 'page';
+    const PLACEHOLDER = 'placeholder';
+    const REDIRECT = 'redirect';
+
+    /**
+     * @required @part
+     *
+     * @var string
+     */
+    public $type = self::PAGE;
+
     const H1_PATTERN = "/^#\\s*(?<title>[^#{]+)/u";
     const HEADER_PATTERN = "/^(?<depth>#+)\\s*(?<title>[^#{\\r\\n]+)#*[ \\t]*(?:{(?<attributes>[^}\\r\\n]*)})?\\r?$/mu";
     const IMAGE_LINK_PATTERN = "/!\\[(?<description>[^\\]]*)\\]\\((?<url>[^\\)]+)\\)/u";
@@ -52,12 +80,17 @@ class Page extends Object_
 
         switch ($property) {
             case 'title': return $this->getTitle();
-            case 'original_text': return $this->directory
+            case 'original_text': return $this->type == static::PLACEHOLDER
                 ? "# " . basename($this->name). "#\n\n{{ child_pages depth=\"1\" }}\n"
-                : file_get_contents($this->name);
+                : file_get_contents($this->filename);
             case 'text': return $this->transform($this->original_text);
             case 'html': return MarkdownExtra::defaultTransform($this->text);
+            case 'parent_page': return $this->getParentPage();
             case 'parent_pages': return $this->getParentPages();
+            case 'sibling_pages': return $this->getSiblingPages();
+            case 'child_pages': return $this->getChildPages();
+            case 'url': return $this->parent->getPageUrl($this->name);
+            case 'redirect_to_url': return $this->parent->getPageUrl($this->redirect_to);
 
             case 'base_url': return $m_app->request->base;
             case 'public_path': return $m_app->path($m_app->public_path);
@@ -65,9 +98,9 @@ class Page extends Object_
             case 'tags': return $this->module->tags;
             case 'tag_renderer': return $m_app[TagRenderer::class];
             case 'type_converter': return $m_app[TypeConverter::class];
-            case 'url_generator': return $m_app[UrlGenerator::class];
             case 'book': return $this->module->book;
             case 'finder': return $m_app[FileFinder::class];
+            case 'request': return $m_app->request;
         }
         return parent::default($property);
     }
@@ -124,7 +157,7 @@ class Page extends Object_
     }
 
     protected function findSourceImage($imageUrl) {
-        $result = dirname($this->name);
+        $result = dirname($this->filename);
 
         foreach (explode('/', $imageUrl) as $part) {
             if ($part == '..') {
@@ -141,7 +174,7 @@ class Page extends Object_
     protected function generateImageTargetFilename($imageUrl) {
         $result = $this->public_path . '/images';
 
-        $path = mb_substr(dirname($this->name), mb_strlen($this->book->file_path));
+        $path = mb_substr(dirname($this->filename), mb_strlen($this->parent->file_path));
         $path = str_replace('\\', '/', $path);
 
         // first element is removed as it is always empty
@@ -226,29 +259,78 @@ class Page extends Object_
         return $key;
     }
 
+    /**
+     * @return Page[]
+     */
     protected function getParentPages() {
+
+        if ($this->name === '/') {
+            return [];
+        }
+
+        $result = ['/' => $this->parent->getPage('/')];
+        $url = rtrim($this->name, '/');
+        for ($pos = mb_strpos($url, '/', 1); $pos !== false; $pos = mb_strpos($url, '/', $pos + 1)) {
+            $name = mb_substr($url, 0, $pos) . $this->parent->suffix_;
+            $result[] = $this->parent->getPage($name);
+        }
+
+        return $result;
+    }
+
+    protected function getParentPage() {
+        if ($this->name === '/') {
+            return null;
+        }
+
+        $url = rtrim($this->name, '/');
+        $pos = mb_strrpos($url, '/', 1);
+
+        if ($pos === false) {
+            return $this->parent->getPage('/');
+        }
+
+        return $this->parent->getPage(mb_substr($url, 0, $pos) . $this->parent->suffix_);
+    }
+
+    protected function getChildPages() {
+        $parentUrl = rtrim($this->name, '/');
+        $path = $this->parent->file_path . $parentUrl;
         $result = [];
 
-        $path = mb_substr($this->name, mb_strlen("{$this->book->file_path}/"));
-        if ($path == "index.md") {
+        if (!is_dir($path)) {
             return $result;
         }
 
-        if (is_file("{$this->book->file_path}/index.md")) {
-            $page = $this->finder->findFile("{$this->book->file_path}/index.md");
-            $result[$this->url_generator->generateUrl($page->name)] =
-                $page->directory ? basename($page->name) : $page->title;
+        foreach (new \DirectoryIterator($path) as $fileInfo) {
+            if ($fileInfo->isDot()) {
+                continue;
+            }
+
+            if ($fileInfo->isDir()) {
+                $name = "{$parentUrl}/{$fileInfo->getFilename()}{$this->parent->suffix_}";
+                $result[$name] = $this->parent->getPage($name);
+                continue;
+            }
+
+            if (!$parentUrl && $fileInfo->getFilename() == 'index.md') {
+                continue;
+            }
+
+            if (preg_match("/(?:\\d+-)?(?<name>.*)\\.md/u", $fileInfo->getFilename(), $match)) {
+                $name = "{$parentUrl}/{$match['name']}{$this->parent->suffix_}";
+                $result[$name] = $this->parent->getPage($name);
+            }
         }
 
-        $parts = explode('/', str_replace('\\', '/', dirname($this->name)));
-        foreach (array_keys($path) as $i) {
+        return $this->parent->sortPages($result);
+    }
+
+    protected function getSiblingPages() {
+        if (!$this->parent_page) {
+            return [];
         }
 
-        for (; mb_strlen($path) >= mb_strlen($this->book->file_path); $path = dirname($path)) {
-            $page = $this->finder->findFile($path);
-            $result[$this->url_generator->generateUrl($filename)] = $page->title;
-        }
-
-        return array_reverse($result);
+        return $this->parent_page->child_pages;
     }
 }

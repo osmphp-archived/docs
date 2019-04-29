@@ -20,7 +20,6 @@ trait DetectRouteTrait
         }
         catch (NotFound $e) {
             $bookDetector = $m_app[BookDetector::class]; /* @var BookDetector $bookDetector */
-            $fileFinder = $m_app[FileFinder::class]; /* @var FileFinder $fileFinder */
             $module = $m_app->modules['Manadev_Docs_Docs']; /* @var Module $module */
             $request = $m_app->request;
 
@@ -35,7 +34,7 @@ trait DetectRouteTrait
             $module->book = $book;
 
             $filePath = mb_substr($request->route, mb_strlen($book->url_path));
-            if (!($page = $fileFinder->findFile($filePath))) {
+            if (!($page = $book->getPage($filePath, false))) {
                 throw $e;
             }
 

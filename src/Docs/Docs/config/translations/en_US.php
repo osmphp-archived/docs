@@ -7,4 +7,5 @@ return [
     "Tag ':tag' not supported" => "Tag ':tag' not supported",
     "Displays broken links in documentation sources" => "Displays broken links in documentation sources",
     "  line :line: placeholder '#'" => "  line :line: placeholder '#'",
+    "Page ':name' not found" => "Page ':name' not found",
 ];

@@ -9,7 +9,8 @@ use Manadev\Core\Object_;
 /**
  * @see \Manadev\Docs\Docs\Tag::$name @handler
  *
- * @property UrlGenerator $url_generator @required
+ * @property Module $module @required
+ * @property Book $book @required
  *
  * @property Page $page @temp
  * @property Tag $tag @temp
@@ -22,7 +23,8 @@ class TagRenderer extends Object_
         global $m_app; /* @var App $m_app */
 
         switch ($property) {
-            case 'url_generator': return $m_app[UrlGenerator::class];
+            case 'module': return $m_app->modules['Manadev_Docs_Docs'];
+            case 'book': return $this->module->book;
         }
         return parent::default($property);
     }
@@ -82,79 +84,22 @@ class TagRenderer extends Object_
     }
 
     protected function renderChildPages() {
-        if ($this->page->directory) {
-            return $this->renderChildPagesFromDirectory($this->page->name);
-        }
-
-        if (basename($this->page->name) == 'index.md') {
-            return $this->renderChildPagesFromDirectory(dirname($this->page->name));
-        }
-
-        $path = mb_substr($this->page->name, 0, mb_strlen($this->page->name) - mb_strlen('.md'));
-        if (!is_dir($path)) {
-            return '';
-        }
-
-        return $this->renderChildPagesFromDirectory($path);
+        return $this->doRenderChildPages($this->page);
     }
 
-    protected function renderChildPagesFromDirectory($path, $depth = 0) {
+    protected function doRenderChildPages(Page $parentPage, $depth = 0) {
         if (isset($this->args['depth']) && $depth >= $this->args['depth']) {
             return '';
         }
 
         $result = '';
-        $pages = $this->findChildPages($path);
-        ksort($pages);
 
-        foreach ($pages as $filename => $title) {
+        foreach ($parentPage->child_pages as $page) {
             $result .= str_repeat(' ', $depth * 4);
-            $result .= "* [" . $title . "]({$this->url_generator->generateUrl($filename)})\n";
-
-            if (basename($filename) == 'index.md') {
-                $result .= $this->renderChildPagesFromDirectory(dirname($filename), $depth + 1);
-            }
+            $result .= "* [" . $page->title . "]({$page->url})\n";
+            $result .= $this->doRenderChildPages($page, $depth + 1);
         }
 
         return $result;
-    }
-
-    protected function findChildPages($path) {
-        $result = [];
-
-        $directories = [];
-
-        foreach (new \DirectoryIterator($path) as $fileInfo) {
-            if ($fileInfo->isDot()) {
-                continue;
-            }
-
-            if ($fileInfo->isDir()) {
-                $directories[$fileInfo->getPathname()] = $fileInfo->getFilename();
-                continue;
-            }
-
-            if ($fileInfo->getFilename() == 'index.md') {
-                continue;
-            }
-
-            if (strtolower(pathinfo($fileInfo->getFilename(), PATHINFO_EXTENSION)) != 'md') {
-                continue;
-            }
-
-            $page = Page::new(['name' => $fileInfo->getPathname()]);
-            $result[$page->name] = $page->title;
-        }
-
-        foreach (array_keys($directories) as $directory) {
-            foreach (array_keys($result) as $filename) {
-                if (preg_match("/(\\d+-)?" . preg_quote(basename($directory)) . "\\.md/u", basename($filename))) {
-                    unset($directories[$directory]);
-                    break;
-                }
-            }
-        }
-
-        return array_merge($result, $directories);
     }
 }

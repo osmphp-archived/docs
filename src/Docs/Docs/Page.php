@@ -41,7 +41,6 @@ use Manadev\Framework\Http\UrlGenerator as HttpUrlGenerator;
  * @property TagRenderer $tag_renderer @required
  * @property TypeConverter $type_converter @required
  * @property HttpUrlGenerator $url_generator @required
- * @property FileFinder $finder @required
  * @property Request $request @required
  */
 class Page extends Object_
@@ -99,7 +98,6 @@ class Page extends Object_
             case 'tag_renderer': return $m_app[TagRenderer::class];
             case 'type_converter': return $m_app[TypeConverter::class];
             case 'book': return $this->module->book;
-            case 'finder': return $m_app[FileFinder::class];
             case 'request': return $m_app->request;
         }
         return parent::default($property);

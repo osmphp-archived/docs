@@ -10,8 +10,6 @@ use Manadev\Framework\Console\Command;
 
 /**
  * @property string $doc_root @required
- * @property FileFinder $file_finder @required
- * @property UrlGenerator $url_generator @required
  *
  * @property string $filename @temp
  * @property bool $filename_rendered @temp
@@ -27,8 +25,6 @@ class ShowBrokenLinks extends Command
 
         switch ($property) {
             case 'doc_root': return $m_app->settings->doc_root;
-            case 'file_finder': return $m_app[FileFinder::class];
-            case 'url_generator': return $m_app[UrlGenerator::class];
         }
         return parent::default($property);
     }

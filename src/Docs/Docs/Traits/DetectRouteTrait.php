@@ -4,11 +4,9 @@ namespace Manadev\Docs\Docs\Traits;
 
 use Manadev\Core\App;
 use Manadev\Docs\Docs\Controllers\Web;
-use Manadev\Docs\Docs\FileFinder;
 use Manadev\Docs\Docs\Module;
 use Manadev\Docs\Docs\BookDetector;
 use Manadev\Framework\Http\Exceptions\NotFound;
-use Manadev\Framework\Http\Responses;
 
 trait DetectRouteTrait
 {

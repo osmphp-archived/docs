@@ -81,7 +81,7 @@ class Page extends Object_
         switch ($property) {
             case 'title': return $this->getTitle();
             case 'original_text': return $this->type == static::PLACEHOLDER
-                ? "# " . basename($this->name). "#\n\n{{ child_pages depth=\"1\" }}\n"
+                ? "# " . basename($this->name). " #\n\n{{ child_pages depth=\"1\" }}\n"
                 : file_get_contents($this->filename);
             case 'text': return $this->transformText($this->original_text);
             case 'html': return MarkdownExtra::defaultTransform($this->text);

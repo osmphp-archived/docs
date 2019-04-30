@@ -83,7 +83,7 @@ class Page extends Object_
             case 'original_text': return $this->type == static::PLACEHOLDER
                 ? "# " . basename($this->name). "#\n\n{{ child_pages depth=\"1\" }}\n"
                 : file_get_contents($this->filename);
-            case 'text': return $this->transform($this->original_text);
+            case 'text': return $this->transformText($this->original_text);
             case 'html': return MarkdownExtra::defaultTransform($this->text);
             case 'level': return $this->getLevel();
             case 'parent_page': return $this->getParentPage();
@@ -115,7 +115,7 @@ class Page extends Object_
         return '';
     }
 
-    protected function transform($text) {
+    protected function transformText($text) {
         $text = $this->makeImagesPublic($text);
         $text = $this->assignHeadingIds($text);
         $text = $this->processTags($text);
@@ -128,8 +128,9 @@ class Page extends Object_
                 return $match[0];
             }
 
-            $imageUrl = $this->base_url . str_replace('\\', '/',
-                mb_substr($filename, mb_strlen($this->public_path)));
+            $imageUrl = $this->base_url .
+                (env('APP_ENV') == 'testing' ? '/testing' : '') .
+                str_replace('\\', '/', mb_substr($filename, mb_strlen($this->public_path)));
             return "![{$match['description']}]({$imageUrl})";
         }, $text);
     }
@@ -172,7 +173,7 @@ class Page extends Object_
     }
 
     protected function generateImageTargetFilename($imageUrl) {
-        $result = $this->public_path . '/images';
+        $result = $this->public_path . '/images' . $this->parent->url_path;
 
         $path = mb_substr(dirname($this->filename), mb_strlen($this->parent->file_path));
         $path = str_replace('\\', '/', $path);

@@ -12,6 +12,7 @@ use Manadev\Framework\Http\UrlGenerator;
  * @property string $file_path @required @part
  * @property string $url_path @required @part
  * @property string $suffix @part Typical values: null, '/', 'html', ''
+ * @property string $cache_key @required @part
  * @property string $suffix_ @required
  *
  * @property UrlGenerator $url_generator @required
@@ -35,6 +36,7 @@ class Book extends Object_
             case 'suffix_': return $this->getSuffix();
             case 'url_generator': return $m_app[UrlGenerator::class];
             case 'request': return $m_app->request;
+            case 'cache_key': return "book|{$this->url_path}";
         }
 
         return parent::default($property);

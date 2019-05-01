@@ -381,7 +381,9 @@ class Page extends Object_
                 continue;
             }
 
-            $result[$fileInfo->getFilename()] = Image::new([], $fileInfo->getFilename(), $this);
+            $result[$fileInfo->getFilename()] = Image::new([
+                'url' => "{$parentUrl}/{$fileInfo->getFilename()}",
+            ], $fileInfo->getFilename(), $this);
         }
 
         ksort($result);

@@ -34,6 +34,7 @@ use Manadev\Framework\Http\UrlGenerator as HttpUrlGenerator;
  * @property Page[] $sibling_pages @required
  * @property Page[] $child_pages @required
  * @property string $url @required
+ * @property Image[] $images @required
  *
  * @property string $base_url @required
  * @property string $public_path @required
@@ -74,6 +75,7 @@ class Page extends Object_
         '`', '"', '\'', '(', ')', '.', ',', '?', '!',
     ];
     const REPLACEMENTS = ['-', '-', '-'];
+    const IMAGE_EXTENSIONS = ['png', 'jpg', 'gif'];
 
     protected function default($property) {
         global $m_app; /* @var App $m_app */
@@ -90,6 +92,7 @@ class Page extends Object_
             case 'parent_pages': return $this->getParentPages();
             case 'sibling_pages': return $this->getSiblingPages();
             case 'child_pages': return $this->getChildPages();
+            case 'images': return $this->getImages();
             case 'url': return $this->parent->getPageUrl($this->name);
             case 'redirect_to_url': return $this->parent->getPageUrl($this->redirect_to);
 
@@ -136,7 +139,7 @@ class Page extends Object_
     }
 
     protected function makeImagePublic($imageUrl) {
-        if (!in_array(strtolower(pathinfo($imageUrl, PATHINFO_EXTENSION)), ['png', 'jpg', 'gif'])) {
+        if (!in_array(strtolower(pathinfo($imageUrl, PATHINFO_EXTENSION)), static::IMAGE_EXTENSIONS)) {
             return null;
         }
 
@@ -306,7 +309,9 @@ class Page extends Object_
     }
 
     protected function getChildPages() {
-        $parentUrl = rtrim($this->name, '/');
+        $parentUrl = $this->name === '/'
+            ? ''
+            : mb_substr($this->name, 0, mb_strlen($this->name) - mb_strlen($this->parent->suffix_));
         $path = $this->parent->file_path . $parentUrl;
         $result = [];
 
@@ -353,6 +358,33 @@ class Page extends Object_
             $result++;
         }
 
+        return $result;
+    }
+
+    protected function getImages() {
+        $parentUrl = $this->name === '/'
+            ? ''
+            : mb_substr($this->name, 0, mb_strlen($this->name) - mb_strlen($this->parent->suffix_));
+        $path = $this->parent->file_path . $parentUrl;
+        $result = [];
+
+        if (!is_dir($path)) {
+            return $result;
+        }
+
+        foreach (new \DirectoryIterator($path) as $fileInfo) {
+            if ($fileInfo->isDot() || $fileInfo->isDir()) {
+                continue;
+            }
+
+            if (!in_array(strtolower($fileInfo->getExtension()), static::IMAGE_EXTENSIONS)) {
+                continue;
+            }
+
+            $result[$fileInfo->getFilename()] = Image::new([], $fileInfo->getFilename(), $this);
+        }
+
+        ksort($result);
         return $result;
     }
 }

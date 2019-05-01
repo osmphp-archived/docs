@@ -291,7 +291,6 @@ class Page extends Object_
      * @return Page[]
      */
     protected function getParentPages() {
-
         if ($this->name === '/') {
             return [];
         }

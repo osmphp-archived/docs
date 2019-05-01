@@ -97,7 +97,7 @@ class Book extends Object_
 
                 $redirectTo = $url . $this->suffix_;
 
-                if (!$this->getPage($redirectTo)) {
+                if (!$this->doGetPage($redirectTo)) {
                     return null;
                 }
 
@@ -111,7 +111,7 @@ class Book extends Object_
             // no suffix configured but URL ends with '/'. Redirect to URL without '/' if such page exists
             $redirectTo = mb_substr($url, 0, mb_strlen($url) - mb_strlen('/'));
 
-            if (!$this->getPage($redirectTo)) {
+            if (!$this->doGetPage($redirectTo)) {
                 return null;
             }
 
@@ -147,7 +147,7 @@ class Book extends Object_
         }
 
         if (is_dir("{$path}/{$filename}")) {
-            return Page::new(['type' => Page::PLACEHOLDER], $url, $this);
+            return Page::new(['type' => Page::PLACEHOLDER], $url . $this->suffix_, $this);
         }
 
         // finally, if file is not found, return null to indicate that page doesn't exist

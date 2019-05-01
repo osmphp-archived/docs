@@ -6,7 +6,7 @@ use Manadev\Core\App;
 use Manadev\Core\Object_;
 use Manadev\Framework\Http\Request;
 use Michelf\MarkdownExtra;
-use Manadev\Framework\Http\UrlGenerator as HttpUrlGenerator;
+use Manadev\Framework\Http\UrlGenerator;
 
 /**
  * Properties applicable to all page types
@@ -42,7 +42,7 @@ use Manadev\Framework\Http\UrlGenerator as HttpUrlGenerator;
  * @property Tags|Tag[] $tags @required
  * @property TagRenderer $tag_renderer @required
  * @property TypeConverter $type_converter @required
- * @property HttpUrlGenerator $url_generator @required
+ * @property UrlGenerator $url_generator @required
  * @property Request $request @required
  */
 class Page extends Object_
@@ -104,6 +104,7 @@ class Page extends Object_
             case 'type_converter': return $m_app[TypeConverter::class];
             case 'book': return $this->module->book;
             case 'request': return $m_app->request;
+            case 'url_generator': return $m_app->url_generator;
         }
         return parent::default($property);
     }
@@ -119,10 +120,22 @@ class Page extends Object_
     }
 
     protected function transformText($text) {
-        $text = $this->makeImagesPublic($text);
+        $text = $this->addTransientQueryParametersToLinks($text);
         $text = $this->assignHeadingIds($text);
         $text = $this->processTags($text);
         return $text;
+    }
+
+
+    protected function addTransientQueryParametersToLinks($text) {
+        return preg_replace_callback(static::LINK_PATTERN, function($match) use ($text) {
+            if (preg_match('#^https?://#', $match['url'])) {
+                return $match[0];
+            }
+
+            return "[{$match['title']}]({$match['url']}{$this->url_generator->
+                generateQueryString($this->request->query)})";
+        }, $text);
     }
 
     protected function makeImagesPublic($text) {

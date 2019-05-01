@@ -40,4 +40,8 @@ class Web extends Controller
             '#html' => ['page' => $this->page],
         ]);
     }
+
+    public function image() {
+        return $this->responses->image($this->module->book->file_path . $this->module->image);
+    }
 }

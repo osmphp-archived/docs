@@ -183,4 +183,12 @@ class Book extends Object_
     public function getPageUrl($name) {
         return $this->url_generator->rawUrl('GET ' . $this->url_path . $name, $this->request->query);
     }
+
+    public function isImage($url) {
+        if (!in_array(strtolower(pathinfo($url, PATHINFO_EXTENSION)), Page::IMAGE_EXTENSIONS)) {
+            return false;
+        }
+
+        return is_file($this->file_path . $url);
+    }
 }

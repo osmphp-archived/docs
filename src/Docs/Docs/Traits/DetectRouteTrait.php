@@ -32,14 +32,22 @@ trait DetectRouteTrait
             $module->book = $book;
 
             $filePath = mb_substr($request->route, mb_strlen($book->url_path));
-            if (!($page = $book->getPage($filePath, false))) {
-                throw $e;
+
+            if ($page = $book->getPage($filePath, false)) {
+                $module->page = $page;
+
+                return Web::new(['route' => '/_books/page', 'method' => 'bookPage', 'public' => true], null,
+                    $m_app->area_->controllers);
             }
 
-            $module->page = $page;
+            if ($book->isImage($filePath)) {
+                $module->image = $filePath;
 
-            return Web::new(['route' => '/_books/page', 'method' => 'bookPage', 'public' => true], null,
-                $m_app->area_->controllers);
+                return Web::new(['route' => '/_books/image', 'method' => 'image', 'public' => true], null,
+                    $m_app->area_->controllers);
+            }
+
+            throw $e;
         }
     }
 }

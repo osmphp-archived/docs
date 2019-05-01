@@ -10,6 +10,7 @@ use Manadev\Framework\Http\Advices\DetectRoute;
  * @property Tags|Tag[] $tags @required
  * @property Book $book @required
  * @property Page $page @required
+ * @property string $image @required
  */
 class Module extends BaseModule
 {

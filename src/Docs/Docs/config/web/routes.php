@@ -9,4 +9,10 @@ return [
         'public' => true,
         'abstract' => true,
     ],
+    'GET /_books/image' => [
+        'class' => Web::class,
+        'method' => 'image',
+        'public' => true,
+        'abstract' => true,
+    ],
 ];

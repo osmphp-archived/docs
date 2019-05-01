@@ -84,7 +84,7 @@ class Page extends Object_
                 ? "# " . basename($this->name). " #\n\n{{ child_pages depth=\"1\" }}\n"
                 : file_get_contents($this->filename);
             case 'text': return $this->transformText($this->original_text);
-            case 'html': return MarkdownExtra::defaultTransform($this->text);
+            case 'html': return $this->transformHtml(MarkdownExtra::defaultTransform($this->text));
             case 'level': return $this->getLevel();
             case 'parent_page': return $this->getParentPage();
             case 'parent_pages': return $this->getParentPages();
@@ -258,6 +258,17 @@ class Page extends Object_
 
         $ids[$key] = true;
         return $key;
+    }
+
+    protected function transformHtml($html) {
+        $html = $this->fixCodeBlocks($html);
+        return $html;
+    }
+
+    protected function fixCodeBlocks($html) {
+//        $html = str_replace('<pre> <code>', '<pre><code>', $html);
+        $html = str_replace("\n</code>", '</code>', $html);
+        return $html;
     }
 
     /**

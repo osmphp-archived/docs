@@ -29,6 +29,11 @@ class Book extends Object_
      */
     protected $pages = [];
 
+    /**
+     * @var Page[]
+     */
+    protected $pages_by_name = [];
+
     protected function default($property) {
         global $m_app; /* @var App $m_app */
 
@@ -79,12 +84,7 @@ class Book extends Object_
         // handle home page URL. In the end we either return found home page or continue
 
         if ($url === '/') {
-            $filename = 'index.md';
-            if (!is_file("{$this->file_path}/{$filename}")) {
-                return Page::new(['type' => Page::PLACEHOLDER], $url, $this);
-            }
-
-            return Page::new(['filename' => "{$this->file_path}/{$filename}"], $url, $this);
+            return $this->getPageByName($url);
         }
 
         // handle suffix. In the end we either return that redirect to page with correct suffix is needed, return
@@ -125,9 +125,31 @@ class Book extends Object_
         // handle page path. There should always be at least one '/' in URL as all page URLs start with '/'.
         // If underlying directory doesn't exist we return that page doesn't exist
 
-        $pos = mb_strrpos($url, '/');
-        $path = $this->file_path . mb_substr($url, 0, $pos);
-        $filename = mb_substr($url, $pos + 1);
+        return $this->getPageByName($url);
+    }
+
+    public function getPageByName($name) {
+        if (!array_key_exists($name, $this->pages_by_name)) {
+            $this->pages_by_name[$name] = $this->doGetPageByName($name);
+        }
+
+        return $this->pages_by_name[$name];
+    }
+
+
+    protected function doGetPageByName($name) {
+        if ($name === '/') {
+            $filename = 'index.md';
+            if (!is_file("{$this->file_path}/{$filename}")) {
+                return Page::new(['type' => Page::PLACEHOLDER], $name, $this);
+            }
+
+            return Page::new(['filename' => "{$this->file_path}/{$filename}"], $name, $this);
+        }
+
+        $pos = mb_strrpos($name, '/');
+        $path = $this->file_path . mb_substr($name, 0, $pos);
+        $filename = mb_substr($name, $pos + 1);
 
         if (!is_dir($path) || !$filename) {
             return null;
@@ -142,17 +164,18 @@ class Book extends Object_
 
             if (preg_match("/(?:\\d+-)?" . preg_quote($filename) . "\\.md/u", $fileInfo->getFilename())) {
                 return Page::new(['filename' => "{$path}/{$fileInfo->getFilename()}"],
-                    $url . $this->suffix_, $this);
+                    $name . $this->suffix_, $this);
             }
         }
 
         if (is_dir("{$path}/{$filename}")) {
-            return Page::new(['type' => Page::PLACEHOLDER], $url . $this->suffix_, $this);
+            return Page::new(['type' => Page::PLACEHOLDER], $name . $this->suffix_, $this);
         }
 
         // finally, if file is not found, return null to indicate that page doesn't exist
         return null;
     }
+
 
     /**
      * @param Page[] $pages
@@ -190,5 +213,12 @@ class Book extends Object_
         }
 
         return is_file($this->file_path . $url);
+    }
+
+    public function getJsConfig() {
+        return [
+            'path' => $this->url_path,
+            'suffix' => $this->suffix_,
+        ];
     }
 }

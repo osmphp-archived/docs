@@ -5,6 +5,7 @@ namespace Manadev\Docs\Docs;
 use Manadev\Core\App;
 use Manadev\Core\Exceptions\NotFound;
 use Manadev\Core\Object_;
+use Manadev\Framework\Cache\Cache;
 use Manadev\Framework\Http\Request;
 use Manadev\Framework\Http\UrlGenerator;
 
@@ -12,11 +13,12 @@ use Manadev\Framework\Http\UrlGenerator;
  * @property string $file_path @required @part
  * @property string $url_path @required @part
  * @property string $suffix @part Typical values: null, '/', 'html', ''
- * @property string $cache_key @required @part
+ * @property string $cache_tag @required @part
  * @property string $suffix_ @required
  *
  * @property UrlGenerator $url_generator @required
  * @property Request $request @required
+ * @property Cache $cache @required
  *
  * @see \Manadev\DocHost\Books\Module:
  *      @property int $id @required @part
@@ -41,10 +43,21 @@ class Book extends Object_
             case 'suffix_': return $this->getSuffix();
             case 'url_generator': return $m_app[UrlGenerator::class];
             case 'request': return $m_app->request;
-            case 'cache_key': return "book|{$this->url_path}";
+            case 'cache': return $m_app->cache;
+            case 'cache_tag': return "book|{$this->url_path}";
         }
 
         return parent::default($property);
+    }
+
+    public function clearCache() {
+        $this->pages = [];
+        $this->pages_by_name = [];
+        $this->cache->flushTag($this->cache_tag);
+    }
+
+    public function getPlaceholderText($name) {
+        return "# " . basename($name). " #\n\n{{ child_pages depth=\"1\" }}\n";
     }
 
     protected function getSuffix() {
@@ -128,6 +141,10 @@ class Book extends Object_
         return $this->getPageByName($url);
     }
 
+    /**
+     * @param string $name
+     * @return Page
+     */
     public function getPageByName($name) {
         if (!array_key_exists($name, $this->pages_by_name)) {
             $this->pages_by_name[$name] = $this->doGetPageByName($name);
@@ -163,13 +180,12 @@ class Book extends Object_
             }
 
             if (preg_match("/(?:\\d+-)?" . preg_quote($filename) . "\\.md/u", $fileInfo->getFilename())) {
-                return Page::new(['filename' => "{$path}/{$fileInfo->getFilename()}"],
-                    $name . $this->suffix_, $this);
+                return Page::new(['filename' => "{$path}/{$fileInfo->getFilename()}"], $name, $this);
             }
         }
 
         if (is_dir("{$path}/{$filename}")) {
-            return Page::new(['type' => Page::PLACEHOLDER], $name . $this->suffix_, $this);
+            return Page::new(['type' => Page::PLACEHOLDER], $name, $this);
         }
 
         // finally, if file is not found, return null to indicate that page doesn't exist
@@ -204,6 +220,10 @@ class Book extends Object_
     }
 
     public function getPageUrl($name) {
+        if ($name !== '/') {
+            $name .= $this->suffix_;
+        }
+
         return $this->url_generator->rawUrl('GET ' . $this->url_path . $name, $this->request->query);
     }
 

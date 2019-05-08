@@ -35,6 +35,7 @@ use Manadev\Framework\Http\UrlGenerator;
  * @property Page[] $child_pages @required
  * @property string $url @required
  * @property Image[] $images @required
+ * @property string $sort_order
  *
  * @property string $base_url @required
  * @property string $public_path @required
@@ -83,7 +84,7 @@ class Page extends Object_
         switch ($property) {
             case 'title': return $this->getTitle();
             case 'original_text': return $this->type == static::PLACEHOLDER
-                ? "# " . basename($this->name). " #\n\n{{ child_pages depth=\"1\" }}\n"
+                ? $this->parent->getPlaceholderText($this->name)
                 : file_get_contents($this->filename);
             case 'text': return $this->transformText($this->original_text);
             case 'html': return $this->transformHtml(MarkdownExtra::defaultTransform($this->text));
@@ -93,6 +94,7 @@ class Page extends Object_
             case 'sibling_pages': return $this->getSiblingPages();
             case 'child_pages': return $this->getChildPages();
             case 'images': return $this->getImages();
+            case 'sort_order': return $this->getSortOrder();
             case 'url': return $this->parent->getPageUrl($this->name);
             case 'redirect_to_url': return $this->parent->getPageUrl($this->redirect_to);
 
@@ -295,11 +297,10 @@ class Page extends Object_
             return [];
         }
 
-        $result = ['/' => $this->parent->getPage('/')];
+        $result = ['/' => $this->parent->getPageByName('/')];
         $url = rtrim($this->name, '/');
         for ($pos = mb_strpos($url, '/', 1); $pos !== false; $pos = mb_strpos($url, '/', $pos + 1)) {
-            $name = mb_substr($url, 0, $pos) . $this->parent->suffix_;
-            $result[] = $this->parent->getPage($name);
+            $result[] = $this->parent->getPageByName(mb_substr($url, 0, $pos));
         }
 
         return $result;
@@ -321,9 +322,7 @@ class Page extends Object_
     }
 
     protected function getChildPages() {
-        $parentUrl = $this->name === '/'
-            ? ''
-            : mb_substr($this->name, 0, mb_strlen($this->name) - mb_strlen($this->parent->suffix_));
+        $parentUrl = rtrim($this->name, '/');
         $path = $this->parent->file_path . $parentUrl;
         $result = [];
 
@@ -400,5 +399,17 @@ class Page extends Object_
 
         ksort($result);
         return $result;
+    }
+
+    protected function getSortOrder() {
+        if ($this->type != static::PAGE) {
+            return null;
+        }
+
+        if (!preg_match("/(?:(?<sort_order>\\d+)-)?.*\\.md/u", basename($this->filename), $match)) {
+            return null;
+        }
+
+        return $match['sort_order'] ?? null;
     }
 }

@@ -8,4 +8,5 @@ return [
     "Displays broken links in documentation sources" => "Displays broken links in documentation sources",
     "  line :line: placeholder '#'" => "  line :line: placeholder '#'",
     "Page ':name' not found" => "Page ':name' not found",
+    "Page type ':type' not supported" => "Page type ':type' not supported",
 ];

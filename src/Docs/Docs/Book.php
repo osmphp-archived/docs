@@ -60,6 +60,10 @@ class Book extends Object_
         return "# " . basename($name). " #\n\n{{ child_pages depth=\"1\" }}\n";
     }
 
+    public function getNewPageText($title) {
+        return "# {$title} #";
+    }
+
     protected function getSuffix() {
         if (!$this->suffix) {
             return '';

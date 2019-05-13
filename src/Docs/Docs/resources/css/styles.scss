@@ -62,5 +62,8 @@
 
   img {
     border: rem(1px) solid $color--book-page--image-line;
+    max-width: 100%;
+    margin: 0 auto;
+    display: block;
   }
 }

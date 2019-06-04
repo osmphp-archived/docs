@@ -29,6 +29,6 @@ class BookDetector extends Object_
             return null;
         }
 
-        return Book::new(['file_path' => $path, 'url_path' => '']);
+        return Book::new(['file_path' => $path, 'url_path' => '', 'suffix' => 'html']);
     }
 }

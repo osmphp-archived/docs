@@ -35,16 +35,12 @@ trait DetectRouteTrait
 
             if ($page = $book->getPage($filePath, false)) {
                 $module->page = $page;
-
-                return Web::new(['route' => '/_books/page', 'method' => 'bookPage', 'public' => true], null,
-                    $m_app->area_->controllers);
+                return $m_app->area_->controllers['GET /_books/page'];
             }
 
             if ($book->isImage($filePath)) {
                 $module->image = $filePath;
-
-                return Web::new(['route' => '/_books/image', 'method' => 'image', 'public' => true], null,
-                    $m_app->area_->controllers);
+                return $m_app->area_->controllers['GET /_books/image'];
             }
 
             throw $e;

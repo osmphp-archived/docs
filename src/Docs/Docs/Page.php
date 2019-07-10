@@ -300,9 +300,7 @@ class Page extends Object_
     }
 
     protected function getImages() {
-        $parentUrl = $this->name === '/'
-            ? ''
-            : mb_substr($this->name, 0, mb_strlen($this->name) - mb_strlen($this->parent->suffix_));
+        $parentUrl = $this->name === '/' ? '' : $this->name;
         $path = $this->parent->file_path . $parentUrl;
         $result = [];
 

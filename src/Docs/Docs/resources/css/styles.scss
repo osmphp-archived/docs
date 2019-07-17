@@ -12,6 +12,12 @@
 
   &__items {
     flex-grow: 1;
+    padding: rem(4px) rem(4px) 0 0;
+  }
+
+  &__menu {
+    flex-shrink: 100;
+    min-width: 36px;
   }
 
   margin-top: rem(16px);

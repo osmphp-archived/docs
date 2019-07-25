@@ -33,6 +33,10 @@ trait DetectRouteTrait
 
             $filePath = mb_substr($request->route, mb_strlen($book->url_path));
 
+            if (starts_with($filePath, '/.')) {
+                throw $e;
+            }
+
             if ($page = $book->getPage($filePath, false)) {
                 $module->page = $page;
                 return $m_app->area_->controllers['GET /_books/page'];

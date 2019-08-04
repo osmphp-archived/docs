@@ -183,7 +183,7 @@ class Book extends Object_
                 continue;
             }
 
-            if (preg_match("/(?:\\d+-)?" . preg_quote($filename) . "\\.md/u", $fileInfo->getFilename())) {
+            if (preg_match("/^(?:\\d+-)?" . preg_quote($filename) . "\\.md\$/u", $fileInfo->getFilename())) {
                 return Page::new(['filename' => "{$path}/{$fileInfo->getFilename()}"], $name, $this);
             }
         }

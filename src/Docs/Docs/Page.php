@@ -268,6 +268,10 @@ class Page extends Object_
                 continue;
             }
 
+            if (starts_with($fileInfo->getFilename(), '.')) {
+                continue;
+            }
+
             if ($fileInfo->isDir()) {
                 $name = "{$parentUrl}/{$fileInfo->getFilename()}{$this->parent->suffix_}";
                 $result[$name] = $this->parent->getPage($name);

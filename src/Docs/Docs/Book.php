@@ -86,7 +86,7 @@ class Book extends Object_
             $this->pages[$url] = $this->doGetPage($url);
         }
 
-        if ($required && (!$this->pages[$url] || $this->pages[$url]->type === page::REDIRECT)) {
+        if ($required && (!$this->pages[$url] || $this->pages[$url]->type === Page::REDIRECT)) {
             throw new NotFound(m_("Page ':name' not found", ['name' => $url]));
         }
 

@@ -96,7 +96,7 @@ class TagRenderer extends Object_
 
         foreach ($parentPage->child_pages as $page) {
             $result .= str_repeat(' ', $depth * 4);
-            $result .= "* [" . $page->title . "]({$page->url})\n";
+            $result .= "* [" . $page->original_title . "]({$page->url})\n";
             $result .= $this->doRenderChildPages($page, $depth + 1);
         }
 

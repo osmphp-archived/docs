@@ -63,7 +63,7 @@ class Page extends Object_
     const H1_PATTERN = "/^#\\s*(?<title>[^#{]+)/u";
     const HEADER_PATTERN = "/^(?<depth>#+)\\s*(?<title>[^#{\\r\\n]+)#*[ \\t]*(?:{(?<attributes>[^}\\r\\n]*)})?\\r?$/mu";
     const IMAGE_LINK_PATTERN = "/!\\[(?<description>[^\\]]*)\\]\\((?<url>[^\\)]+)\\)/u";
-    const TAG_PATTERN = "/{{\\s*(?<tag>[^ }]*)(?<args>.*)}}/u";
+    const TAG_PATTERN = "/(?<whitespace> {4})?(?<opening_backtick>`)?{{\\s*(?<tag>[^ }]*)(?<args>.*)}}(?<closing_backtick>`)?/u";
     const ARG_PATTERN = "/(?<key>[a-z0-9_]+)\\s*=\\s*\"(?<value>[^\"]*)\"/u";
     const ID_PATTERN = "/#(?<id>[^ ]+)/u";
     const LINK_PATTERN = "/\\[(?<title>[^\\]]+)\\]\\((?<url>[^\\)]+)\\)/u";
@@ -142,6 +142,16 @@ class Page extends Object_
 
     protected function processTags($text) {
         return preg_replace_callback(static::TAG_PATTERN, function($match) use ($text) {
+            // don't expand tags in code block
+            if (!empty($match['whitespace'])) {
+                return $match[0];
+            }
+
+            // don't expand tags in inline code
+            if (!empty($match['opening_backtick']) && !empty($match['closing_backtick'])) {
+                return $match[0];
+            }
+
             if (!($tag = $this->tags[$match['tag']] ?? null)) {
                 return $match[0];
             }

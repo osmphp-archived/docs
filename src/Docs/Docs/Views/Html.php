@@ -30,9 +30,4 @@ class Html extends View
 
         return parent::default($property);
     }
-
-    public function rendering() {
-        $this->js_config->book = (object)$this->book->getJsConfig();
-        parent::rendering();
-    }
 }

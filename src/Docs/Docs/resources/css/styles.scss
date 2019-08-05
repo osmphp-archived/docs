@@ -12,7 +12,15 @@
 
   &__items {
     flex-grow: 1;
+    padding: rem(4px) rem(4px) 0 0;
   }
+
+  &__menu {
+    flex-shrink: 100;
+    min-width: 36px;
+  }
+
+  margin-top: rem(16px);
 }
 
 .html {
@@ -60,10 +68,13 @@
     }
   }
 
-  img {
-    border: rem(1px) solid $color--book-page--image-line;
+  img, svg {
     max-width: 100%;
     margin: 0 auto;
     display: block;
+  }
+
+  img {
+    border: rem(1px) solid $color--book-page--image-line;
   }
 }

@@ -11,7 +11,9 @@
         </nav>
 
         @if (count($view->menu->items_))
-            @include ($view->menu)
+            <div class="breadcrumbs__menu">
+                @include ($view->menu)
+            </div>
         @endif
     </div>
 @endif

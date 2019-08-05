@@ -4,16 +4,19 @@ namespace Manadev\Docs\Docs\Controllers;
 
 use Manadev\Core\App;
 use Manadev\Docs\Docs\Book;
+use Manadev\Docs\Docs\Hints\JsConfigHint;
 use Manadev\Docs\Docs\Page;
 use Manadev\Docs\Docs\Module;
 use Manadev\Framework\Http\Controller;
 use Manadev\Framework\Http\Responses;
+use Manadev\Framework\Views\JsConfig;
 
 /**
  * @property Module $module @required
  * @property Page $page @required
  * @property Responses $responses @required
  * @property Book $book @required
+ * @property JsConfigHint|JsConfig $js_config @required
  */
 class Web extends Controller
 {
@@ -25,6 +28,7 @@ class Web extends Controller
             case 'page': return $this->module->page;
             case 'responses': return $m_app[Responses::class];
             case 'book': return $this->module->book;
+            case 'js_config': return $m_app[JsConfig::class];
         }
         return parent::default($property);
     }
@@ -33,6 +37,8 @@ class Web extends Controller
         if ($this->page->type == Page::REDIRECT) {
             return $this->responses->redirect($this->page->redirect_to_url);
         }
+
+        $this->js_config->book = (object)$this->book->getJsConfig();
 
         return m_layout('books_page', [
             '#page' => ['title' => $this->page->title],

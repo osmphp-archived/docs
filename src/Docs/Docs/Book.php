@@ -86,7 +86,7 @@ class Book extends Object_
             $this->pages[$url] = $this->doGetPage($url);
         }
 
-        if ($required && (!$this->pages[$url] || $this->pages[$url]->type === page::REDIRECT)) {
+        if ($required && (!$this->pages[$url] || $this->pages[$url]->type === Page::REDIRECT)) {
             throw new NotFound(m_("Page ':name' not found", ['name' => $url]));
         }
 
@@ -183,7 +183,7 @@ class Book extends Object_
                 continue;
             }
 
-            if (preg_match("/(?:\\d+-)?" . preg_quote($filename) . "\\.md/u", $fileInfo->getFilename())) {
+            if (preg_match("/^(?:\\d+-)?" . preg_quote($filename) . "\\.md\$/u", $fileInfo->getFilename())) {
                 return Page::new(['filename' => "{$path}/{$fileInfo->getFilename()}"], $name, $this);
             }
         }

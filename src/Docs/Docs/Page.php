@@ -24,6 +24,7 @@ use Manadev\Framework\Http\UrlGenerator;
  *
  * @property string $filename @required @part File name of this book page
  * @property string $title @required @part
+ * @property string $original_title @required @part
  * @property string $html @required @part
  * @property string $text @required @part
  * @property string $original_text @required @part
@@ -73,7 +74,7 @@ class Page extends Object_
         ' ', '\\', '/',
 
         // characters listed below when found in SEOified text are ignored, i.e. not put into generated URL
-        '`', '"', '\'', '(', ')', '.', ',', '?', '!',
+        '`', '"', '\'', '(', ')', '.', ',', '?', '!', '+'
     ];
     const REPLACEMENTS = ['-', '-', '-'];
     const IMAGE_EXTENSIONS = ['png', 'jpg', 'gif'];
@@ -82,6 +83,7 @@ class Page extends Object_
         global $m_app; /* @var App $m_app */
 
         switch ($property) {
+            case 'original_title': return $this->getOriginalTitle();
             case 'title': return $this->getTitle();
             case 'original_text': return $this->type == static::PLACEHOLDER
                 ? $this->parent->getPlaceholderText($this->name)
@@ -111,7 +113,7 @@ class Page extends Object_
         return parent::default($property);
     }
 
-    protected function getTitle() {
+    protected function getOriginalTitle() {
         foreach (explode("\n", $this->original_text) as $line) {
             if (preg_match(static::H1_PATTERN, $line, $match)) {
                 return trim($match['title']);
@@ -119,6 +121,10 @@ class Page extends Object_
         }
 
         return '';
+    }
+
+    protected function getTitle() {
+        return str_replace('`', '', $this->original_title);
     }
 
     protected function transformText($text) {
@@ -272,6 +278,10 @@ class Page extends Object_
                 continue;
             }
 
+            if (starts_with($fileInfo->getFilename(), '.')) {
+                continue;
+            }
+
             if ($fileInfo->isDir()) {
                 $name = "{$parentUrl}/{$fileInfo->getFilename()}{$this->parent->suffix_}";
                 $result[$name] = $this->parent->getPage($name);
@@ -310,9 +320,7 @@ class Page extends Object_
     }
 
     protected function getImages() {
-        $parentUrl = $this->name === '/'
-            ? ''
-            : mb_substr($this->name, 0, mb_strlen($this->name) - mb_strlen($this->parent->suffix_));
+        $parentUrl = $this->name === '/' ? '' : $this->name;
         $path = $this->parent->file_path . $parentUrl;
         $result = [];
 

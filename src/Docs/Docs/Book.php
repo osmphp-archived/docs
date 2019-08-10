@@ -218,8 +218,23 @@ class Book extends Object_
                 return 0;
             }
 
-            if ($a->filename < $b->filename) return -1 * $result;
-            if ($a->filename > $b->filename) return 1 * $result;
+            if ($a->sort_order) {
+                if ($b->sort_order) {
+                    if ($a->sort_order < $b->sort_order) return -1 * $result;
+                    if ($a->sort_order > $b->sort_order) return 1 * $result;
+                }
+                else {
+                    return -1;
+                }
+            }
+            else {
+                if ($b->sort_order) {
+                    return 1;
+                }
+            }
+
+            if ($a->filename < $b->filename) return -1;
+            if ($a->filename > $b->filename) return 1;
 
             return 0;
         });

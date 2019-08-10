@@ -199,24 +199,28 @@ class Book extends Object_
 
     /**
      * @param Page[] $pages
+     * @param string $direction
      * @return Page[]
      */
-    public function sortPages($pages) {
-        uasort($pages, function(Page $a, Page $b) {
+    public function sortPages($pages, $direction) {
+        uasort($pages, function(Page $a, Page $b) use ($direction) {
+            $result = $direction == Page::DESC ? -1 : 1;
+
             if ($a->type != $b->type) {
-                if ($a->type < $b->type) return -1;
-                if ($a->type > $b->type) return 1;
+                if ($a->type < $b->type) return -1 * $result;
+                if ($a->type > $b->type) return 1 * $result;
                 return 0;
             }
 
             if ($a->type !== Page::PAGE) {
-                if ($a->name < $b->name) return -1;
-                if ($a->name > $b->name) return 1;
+                if ($a->name < $b->name) return -1 * $result;
+                if ($a->name > $b->name) return 1 * $result;
                 return 0;
             }
 
-            if ($a->filename < $b->filename) return -1;
-            if ($a->filename > $b->filename) return 1;
+            if ($a->filename < $b->filename) return -1 * $result;
+            if ($a->filename > $b->filename) return 1 * $result;
+
             return 0;
         });
 

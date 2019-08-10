@@ -20,7 +20,7 @@ use Manadev\Framework\Http\UrlGenerator;
  *      (most often there is extra '/')
  * @property string $redirect_to_url
  *
- * Properties applicable to PAGE and PLACEHOLDER types:
+ * Properties applicable to PAGE and PLACEHOLDER types, inferred from `name` property:
  *
  * @property string $filename @required @part File name of this book page
  * @property string $title @required @part
@@ -29,17 +29,23 @@ use Manadev\Framework\Http\UrlGenerator;
  * @property string $text @required @part
  * @property string $original_text @required @part
  * @property int $level @required @part
+ * @property string $sort_order
+ * @property string $url @required
+ *
+ * Properties applicable to PAGE and PLACEHOLDER types, collected from file system:
  *
  * @property Page $parent_page
  * @property Page[] $parent_pages @required
  * @property Page[] $sibling_pages @required
  * @property Page[] $child_pages @required
- * @property string $url @required
  * @property Image[] $images @required
- * @property string $sort_order
  *
- * @property string $base_url @required
- * @property string $public_path @required
+ * Properties read from property section in the end of the document
+ * @property object $properties @part
+ * @property string $child_page_direction @required @part
+ *
+ * Dependencies:
+ *
  * @property Module $module @required
  * @property Tags|Tag[] $tags @required
  * @property TagRenderer $tag_renderer @required
@@ -68,16 +74,21 @@ class Page extends Object_
     const ARG_PATTERN = "/(?<key>[a-z0-9_]+)\\s*=\\s*\"(?<value>[^\"]*)\"/u";
     const ID_PATTERN = "/#(?<id>[^ ]+)/u";
     const LINK_PATTERN = "/\\[(?<title>[^\\]]+)\\]\\((?<url>[^\\)]+)\\)/u";
+
     const CHARS_BEING_REPLACED = [
         // characters listed below when found in SEOified text are replaced by SEO friendly characters from
         // REPLACEMENTS array. For example, ' ' ir replaced with '-'
         ' ', '\\', '/',
 
         // characters listed below when found in SEOified text are ignored, i.e. not put into generated URL
-        '`', '"', '\'', '(', ')', '.', ',', '?', '!', '+'
+        '`', '"', '\'', '(', ')', '.', ',', '?', '!', '+', '@'
     ];
     const REPLACEMENTS = ['-', '-', '-'];
+
     const IMAGE_EXTENSIONS = ['png', 'jpg', 'gif'];
+
+    const ASC = 'asc';
+    const DESC = 'desc';
 
     protected function default($property) {
         global $m_app; /* @var App $m_app */
@@ -91,17 +102,19 @@ class Page extends Object_
             case 'text': return $this->transformText($this->original_text);
             case 'html': return $this->transformHtml(MarkdownExtra::defaultTransform($this->text));
             case 'level': return $this->getLevel();
+            case 'sort_order': return $this->getSortOrder();
+            case 'url': return $this->parent->getPageUrl($this->name);
+            case 'redirect_to_url': return $this->parent->getPageUrl($this->redirect_to);
+
+            case 'properties': return $this->getProperties();
+            case 'child_page_direction': return $this->getChildPageDirection();
+
             case 'parent_page': return $this->getParentPage();
             case 'parent_pages': return $this->getParentPages();
             case 'sibling_pages': return $this->getSiblingPages();
             case 'child_pages': return $this->getChildPages();
             case 'images': return $this->getImages();
-            case 'sort_order': return $this->getSortOrder();
-            case 'url': return $this->parent->getPageUrl($this->name);
-            case 'redirect_to_url': return $this->parent->getPageUrl($this->redirect_to);
 
-            case 'base_url': return $m_app->request->base;
-            case 'public_path': return $m_app->path($m_app->public_path);
             case 'module': return $m_app->modules['Manadev_Docs_Docs'];
             case 'tags': return $this->module->tags;
             case 'tag_renderer': return $m_app[TagRenderer::class];
@@ -128,12 +141,16 @@ class Page extends Object_
     }
 
     protected function transformText($text) {
+        $text = $this->removePropertySection($text);
         $text = $this->addTransientQueryParametersToLinks($text);
         $text = $this->assignHeadingIds($text);
         $text = $this->processTags($text);
         return $text;
     }
 
+    protected function removePropertySection($text) {
+        return $this->properties ? mb_substr($text, 0, mb_strrpos($text, "\n---")) : $text;
+    }
 
     protected function addTransientQueryParametersToLinks($text) {
         return preg_replace_callback(static::LINK_PATTERN, function($match) use ($text) {
@@ -288,7 +305,7 @@ class Page extends Object_
             }
         }
 
-        return $this->parent->sortPages($result);
+        return $this->parent->sortPages($result, $this->child_page_direction);
     }
 
     protected function getSiblingPages() {
@@ -346,5 +363,28 @@ class Page extends Object_
         }
 
         return $match['sort_order'] ?? null;
+    }
+
+
+    protected function getProperties() {
+        $text = $this->original_text;
+
+        if (($pos = mb_strrpos($text, "\n---")) === false) {
+            return null;
+        }
+
+        if (($pos = mb_strpos($text, "\n", $pos + mb_strlen("\n---"))) === false) {
+            return null;
+        }
+
+        return json_decode(mb_substr($text, $pos));
+    }
+
+    protected function getChildPageDirection() {
+        $result = strtolower($this->properties->child_page_direction
+            ?? $this->parent_page->child_page_direction
+            ?? static::ASC);
+
+        return $result != static::DESC ? static::ASC : static::DESC;
     }
 }

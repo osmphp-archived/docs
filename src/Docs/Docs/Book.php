@@ -233,8 +233,8 @@ class Book extends Object_
                 }
             }
 
-            if ($a->filename < $b->filename) return -1;
-            if ($a->filename > $b->filename) return 1;
+            if ($a->filename < $b->filename) return -1 * $result;
+            if ($a->filename > $b->filename) return 1 * $result;
 
             return 0;
         });

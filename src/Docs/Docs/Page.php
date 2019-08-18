@@ -69,6 +69,7 @@ class Page extends Object_
 
     const H1_PATTERN = "/^#\\s*(?<title>[^#{]+)/u";
     const HEADER_PATTERN = "/^(?<depth>#+)\\s*(?<title>[^#{\\r\\n]+)#*[ \\t]*(?:{(?<attributes>[^}\\r\\n]*)})?\\r?$/mu";
+    const ALTERNATE_HEADER_PATTERN = "/\\n(?<title>[^{\\r\\n]+)(?:{(?<attributes>[^}\\r\\n]*)})?\\r?\\n--/mu";
     const IMAGE_LINK_PATTERN = "/!\\[(?<description>[^\\]]*)\\]\\((?<url>[^\\)]+)\\)/u";
     const TAG_PATTERN = "/(?<whitespace> {4})?(?<opening_backtick>`)?{{\\s*(?<tag>[^ }]*)(?<args>.*)}}(?<closing_backtick>`)?/u";
     const ARG_PATTERN = "/(?<key>[a-z0-9_]+)\\s*=\\s*\"(?<value>[^\"]*)\"/u";
@@ -81,7 +82,7 @@ class Page extends Object_
         ' ', '\\', '/',
 
         // characters listed below when found in SEOified text are ignored, i.e. not put into generated URL
-        '`', '"', '\'', '(', ')', '.', ',', '?', '!', '+', '@'
+        '`', '"', '\'', '(', ')', '.', ',', '?', '!', '+', '@', ':'
     ];
     const REPLACEMENTS = ['-', '-', '-'];
 
@@ -212,7 +213,7 @@ class Page extends Object_
     protected function assignHeadingIds($text) {
         $ids = [];
 
-        return preg_replace_callback(static::HEADER_PATTERN, function($match) use (&$ids){
+        $text = preg_replace_callback(static::HEADER_PATTERN, function($match) use (&$ids){
             $attributes = $match['attributes'] ?? '';
             if (mb_strpos($attributes, '#') !== false) {
                 return $match[0];
@@ -222,6 +223,19 @@ class Page extends Object_
 
             return "{$match['depth']} {$match['title']} {$match['depth']} {#{$id} {$attributes}}";
         }, $text);
+
+        $text = preg_replace_callback(static::ALTERNATE_HEADER_PATTERN, function($match) use (&$ids){
+            $attributes = $match['attributes'] ?? '';
+            if (mb_strpos($attributes, '#') !== false) {
+                return $match[0];
+            }
+
+            $id = $this->generateId($match['title'], $ids);
+
+            return "{$match['title']} {#{$id} {$attributes}}\r\n--";
+        }, $text);
+
+        return $text;
     }
 
     protected function generateId($title, &$ids) {

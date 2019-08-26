@@ -1,8 +1,8 @@
 <?php
 
-namespace Manadev\Docs\Docs;
+namespace Osm\Docs\Docs;
 
-use Manadev\Core\Object_;
+use Osm\Core\Object_;
 
 /**
  * @property string $name @required @part

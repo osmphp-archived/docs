@@ -1,6 +1,6 @@
 <?php
 
-use Manadev\Docs\Docs\Tag;
+use Osm\Docs\Docs\Tag;
 
 return [
     'toc' => [

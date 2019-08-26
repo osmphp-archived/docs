@@ -1,8 +1,8 @@
 <?php
 
-namespace Manadev\Docs\Docs\Hints;
+namespace Osm\Docs\Docs\Hints;
 
-use Manadev\Framework\Views\JsConfig;
+use Osm\Framework\Views\JsConfig;
 
 /**
  * @property object $book @part

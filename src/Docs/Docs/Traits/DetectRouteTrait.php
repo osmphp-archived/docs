@@ -1,12 +1,12 @@
 <?php
 
-namespace Manadev\Docs\Docs\Traits;
+namespace Osm\Docs\Docs\Traits;
 
-use Manadev\Core\App;
-use Manadev\Docs\Docs\Controllers\Web;
-use Manadev\Docs\Docs\Module;
-use Manadev\Docs\Docs\BookDetector;
-use Manadev\Framework\Http\Exceptions\NotFound;
+use Osm\Core\App;
+use Osm\Docs\Docs\Controllers\Web;
+use Osm\Docs\Docs\Module;
+use Osm\Docs\Docs\BookDetector;
+use Osm\Framework\Http\Exceptions\NotFound;
 
 trait DetectRouteTrait
 {
@@ -18,7 +18,7 @@ trait DetectRouteTrait
         }
         catch (NotFound $e) {
             $bookDetector = $m_app[BookDetector::class]; /* @var BookDetector $bookDetector */
-            $module = $m_app->modules['Manadev_Docs_Docs']; /* @var Module $module */
+            $module = $m_app->modules['Osm_Docs_Docs']; /* @var Module $module */
             $request = $m_app->request;
 
             if ($request->method != 'GET') {

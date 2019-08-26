@@ -1,5 +1,5 @@
 <?php
-/* @var \Manadev\Docs\Docs\Views\Breadcrumbs $view */
+/* @var \Osm\Docs\Docs\Views\Breadcrumbs $view */
 ?>
 @if (count($view->page->parent_pages) || count($view->menu->items_))
     <div class="breadcrumbs">

@@ -1,9 +1,9 @@
 <?php
 
-use Manadev\Docs\Docs\Views\Breadcrumbs;
-use Manadev\Docs\Docs\Views\Html;
-use Manadev\Framework\Views\Views\Container;
-use Manadev\Ui\MenuBars\Views\MenuBar;
+use Osm\Docs\Docs\Views\Breadcrumbs;
+use Osm\Docs\Docs\Views\Html;
+use Osm\Framework\Views\Views\Container;
+use Osm\Ui\MenuBars\Views\MenuBar;
 
 return [
     '@include' => ['base'],

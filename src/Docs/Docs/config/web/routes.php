@@ -1,6 +1,6 @@
 <?php
 
-use Manadev\Docs\Docs\Controllers\Web;
+use Osm\Docs\Docs\Controllers\Web;
 
 return [
     'GET /_books/page' => [

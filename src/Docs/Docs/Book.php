@@ -1,13 +1,13 @@
 <?php
 
-namespace Manadev\Docs\Docs;
+namespace Osm\Docs\Docs;
 
-use Manadev\Core\App;
-use Manadev\Core\Exceptions\NotFound;
-use Manadev\Core\Object_;
-use Manadev\Framework\Cache\Cache;
-use Manadev\Framework\Http\Request;
-use Manadev\Framework\Http\UrlGenerator;
+use Osm\Core\App;
+use Osm\Core\Exceptions\NotFound;
+use Osm\Core\Object_;
+use Osm\Framework\Cache\Cache;
+use Osm\Framework\Http\Request;
+use Osm\Framework\Http\UrlGenerator;
 
 /**
  * @property string $file_path @required @part
@@ -20,7 +20,7 @@ use Manadev\Framework\Http\UrlGenerator;
  * @property Request $request @required
  * @property Cache $cache @required
  *
- * @see \Manadev\DocHost\Books\Module:
+ * @see \Osm\DocHost\Books\Module:
  *      @property int $id @required @part
  *      @property int $customer @required @part
  */

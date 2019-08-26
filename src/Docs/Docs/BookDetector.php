@@ -1,11 +1,11 @@
 <?php
 
-namespace Manadev\Docs\Docs;
+namespace Osm\Docs\Docs;
 
-use Manadev\Core\App;
-use Manadev\Core\Object_;
-use Manadev\Docs\Docs\Hints\SettingsHint;
-use Manadev\Framework\Settings\Settings;
+use Osm\Core\App;
+use Osm\Core\Object_;
+use Osm\Docs\Docs\Hints\SettingsHint;
+use Osm\Framework\Settings\Settings;
 
 /**
  * @property Settings|SettingsHint $settings @required

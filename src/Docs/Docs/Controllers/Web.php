@@ -1,15 +1,15 @@
 <?php
 
-namespace Manadev\Docs\Docs\Controllers;
+namespace Osm\Docs\Docs\Controllers;
 
-use Manadev\Core\App;
-use Manadev\Docs\Docs\Book;
-use Manadev\Docs\Docs\Hints\JsConfigHint;
-use Manadev\Docs\Docs\Page;
-use Manadev\Docs\Docs\Module;
-use Manadev\Framework\Http\Controller;
-use Manadev\Framework\Http\Responses;
-use Manadev\Framework\Views\JsConfig;
+use Osm\Core\App;
+use Osm\Docs\Docs\Book;
+use Osm\Docs\Docs\Hints\JsConfigHint;
+use Osm\Docs\Docs\Page;
+use Osm\Docs\Docs\Module;
+use Osm\Framework\Http\Controller;
+use Osm\Framework\Http\Responses;
+use Osm\Framework\Views\JsConfig;
 
 /**
  * @property Module $module @required
@@ -24,7 +24,7 @@ class Web extends Controller
         global $m_app; /* @var App $m_app */
 
         switch ($property) {
-            case 'module': return $m_app->modules['Manadev_Docs_Docs'];
+            case 'module': return $m_app->modules['Osm_Docs_Docs'];
             case 'page': return $this->module->page;
             case 'responses': return $m_app[Responses::class];
             case 'book': return $this->module->book;

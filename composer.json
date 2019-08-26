@@ -2,9 +2,9 @@
     "name": "osmphp/docs",
     "autoload": {
         "psr-4": {
-            "Manadev\\": "src/",
-            "Manadev\\Tests\\": "tests/",
-            "Manadev\\Samples\\": "samples/"
+            "Osm\\": "src/",
+            "Osm\\Tests\\": "tests/",
+            "Osm\\Samples\\": "samples/"
         }
     },
     "require": {

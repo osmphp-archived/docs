@@ -1,10 +1,10 @@
 <?php
 
-namespace Manadev\Docs\Docs;
+namespace Osm\Docs\Docs;
 
-use Manadev\Core\App;
-use Manadev\Core\Modules\BaseModule;
-use Manadev\Framework\Http\Advices\DetectRoute;
+use Osm\Core\App;
+use Osm\Core\Modules\BaseModule;
+use Osm\Framework\Http\Advices\DetectRoute;
 
 /**
  * @property Tags|Tag[] $tags @required
@@ -15,7 +15,7 @@ use Manadev\Framework\Http\Advices\DetectRoute;
 class Module extends BaseModule
 {
     public $hard_dependencies = [
-        'Manadev_Ui_Aba',
+        'Osm_Ui_Aba',
     ];
 
     public $traits = [

@@ -1,10 +1,10 @@
 <?php
 
-namespace Manadev\Docs\Docs\Views;
+namespace Osm\Docs\Docs\Views;
 
-use Manadev\Docs\Docs\Page;
-use Manadev\Framework\Views\View;
-use Manadev\Ui\Menus\Views\Menu;
+use Osm\Docs\Docs\Page;
+use Osm\Framework\Views\View;
+use Osm\Ui\Menus\Views\Menu;
 
 /**
  * @property Page $page @required
@@ -12,5 +12,5 @@ use Manadev\Ui\Menus\Views\Menu;
  */
 class Breadcrumbs extends View
 {
-    public $template = 'Manadev_Docs_Docs.breadcrumbs';
+    public $template = 'Osm_Docs_Docs.breadcrumbs';
 }

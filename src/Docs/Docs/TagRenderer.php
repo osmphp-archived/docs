@@ -1,13 +1,13 @@
 <?php
 
-namespace Manadev\Docs\Docs;
+namespace Osm\Docs\Docs;
 
-use Manadev\Core\App;
-use Manadev\Core\Exceptions\NotSupported;
-use Manadev\Core\Object_;
+use Osm\Core\App;
+use Osm\Core\Exceptions\NotSupported;
+use Osm\Core\Object_;
 
 /**
- * @see \Manadev\Docs\Docs\Tag::$name @handler
+ * @see \Osm\Docs\Docs\Tag::$name @handler
  *
  * @property Module $module @required
  * @property Book $book @required
@@ -23,7 +23,7 @@ class TagRenderer extends Object_
         global $m_app; /* @var App $m_app */
 
         switch ($property) {
-            case 'module': return $m_app->modules['Manadev_Docs_Docs'];
+            case 'module': return $m_app->modules['Osm_Docs_Docs'];
             case 'book': return $this->module->book;
         }
         return parent::default($property);

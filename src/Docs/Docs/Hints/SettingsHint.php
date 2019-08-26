@@ -1,8 +1,8 @@
 <?php
 
-namespace Manadev\Docs\Docs\Hints;
+namespace Osm\Docs\Docs\Hints;
 
-use Manadev\Framework\Settings\Settings;
+use Osm\Framework\Settings\Settings;
 
 /**
  * @property string $doc_root @part

@@ -1,6 +1,6 @@
-import isString from "Manadev_Framework_Js/isString";
-import parseUrl from "Manadev_Framework_Js/parseUrl";
-import config from "Manadev_Framework_Js/vars/config";
+import isString from "Osm_Framework_Js/isString";
+import parseUrl from "Osm_Framework_Js/parseUrl";
+import config from "Osm_Framework_Js/vars/config";
 
 export default class Page {
     constructor(url) {

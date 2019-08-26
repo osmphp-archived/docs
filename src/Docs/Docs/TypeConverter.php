@@ -1,14 +1,14 @@
 <?php
 
-namespace Manadev\Docs\Docs;
+namespace Osm\Docs\Docs;
 
-use Manadev\Core\Exceptions\NotSupported;
-use Manadev\Core\Object_;
+use Osm\Core\Exceptions\NotSupported;
+use Osm\Core\Object_;
 
 class TypeConverter extends Object_
 {
     /**
-     * @see \Manadev\Docs\Docs\Tag::$parameters @handler
+     * @see \Osm\Docs\Docs\Tag::$parameters @handler
      *
      * @param $type
      * @param $value

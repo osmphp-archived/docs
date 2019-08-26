@@ -1,14 +1,14 @@
 <?php
 
-namespace Manadev\Docs\Docs\Views;
+namespace Osm\Docs\Docs\Views;
 
-use Manadev\Core\App;
-use Manadev\Docs\Docs\Book;
-use Manadev\Docs\Docs\Hints\JsConfigHint;
-use Manadev\Docs\Docs\Module;
-use Manadev\Docs\Docs\Page;
-use Manadev\Framework\Views\JsConfig;
-use Manadev\Framework\Views\View;
+use Osm\Core\App;
+use Osm\Docs\Docs\Book;
+use Osm\Docs\Docs\Hints\JsConfigHint;
+use Osm\Docs\Docs\Module;
+use Osm\Docs\Docs\Page;
+use Osm\Framework\Views\JsConfig;
+use Osm\Framework\Views\View;
 
 /**
  * @property Page $page @required
@@ -18,13 +18,13 @@ use Manadev\Framework\Views\View;
  */
 class Html extends View
 {
-    public $template = 'Manadev_Docs_Docs.html';
+    public $template = 'Osm_Docs_Docs.html';
 
     protected function default($property) {
         global $m_app; /* @var App $m_app */
 
         switch ($property) {
-            case 'doc_module': return $m_app->modules['Manadev_Docs_Docs'];
+            case 'doc_module': return $m_app->modules['Osm_Docs_Docs'];
             case 'book': return $this->doc_module->book;
         }
 

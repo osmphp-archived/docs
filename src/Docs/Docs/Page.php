@@ -1,12 +1,12 @@
 <?php
 
-namespace Manadev\Docs\Docs;
+namespace Osm\Docs\Docs;
 
-use Manadev\Core\App;
-use Manadev\Core\Object_;
-use Manadev\Framework\Http\Request;
+use Osm\Core\App;
+use Osm\Core\Object_;
+use Osm\Framework\Http\Request;
 use Michelf\MarkdownExtra;
-use Manadev\Framework\Http\UrlGenerator;
+use Osm\Framework\Http\UrlGenerator;
 
 /**
  * Properties applicable to all page types
@@ -116,7 +116,7 @@ class Page extends Object_
             case 'child_pages': return $this->getChildPages();
             case 'images': return $this->getImages();
 
-            case 'module': return $m_app->modules['Manadev_Docs_Docs'];
+            case 'module': return $m_app->modules['Osm_Docs_Docs'];
             case 'tags': return $this->module->tags;
             case 'tag_renderer': return $m_app[TagRenderer::class];
             case 'type_converter': return $m_app[TypeConverter::class];

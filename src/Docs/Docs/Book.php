@@ -37,13 +37,13 @@ class Book extends Object_
     protected $pages_by_name = [];
 
     protected function default($property) {
-        global $m_app; /* @var App $m_app */
+        global $osm_app; /* @var App $osm_app */
 
         switch ($property) {
             case 'suffix_': return $this->getSuffix();
-            case 'url_generator': return $m_app[UrlGenerator::class];
-            case 'request': return $m_app->request;
-            case 'cache': return $m_app->cache;
+            case 'url_generator': return $osm_app[UrlGenerator::class];
+            case 'request': return $osm_app->request;
+            case 'cache': return $osm_app->cache;
             case 'cache_tag': return "book|{$this->url_path}";
         }
 

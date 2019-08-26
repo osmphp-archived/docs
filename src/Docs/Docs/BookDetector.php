@@ -13,10 +13,10 @@ use Osm\Framework\Settings\Settings;
 class BookDetector extends Object_
 {
     protected function default($property) {
-        global $m_app; /* @var App $m_app */
+        global $osm_app; /* @var App $osm_app */
 
         switch ($property) {
-            case 'settings': return $m_app->settings;
+            case 'settings': return $osm_app->settings;
         }
         return parent::default($property);
     }

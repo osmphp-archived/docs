@@ -21,10 +21,10 @@ class Html extends View
     public $template = 'Osm_Docs_Docs.html';
 
     protected function default($property) {
-        global $m_app; /* @var App $m_app */
+        global $osm_app; /* @var App $osm_app */
 
         switch ($property) {
-            case 'doc_module': return $m_app->modules['Osm_Docs_Docs'];
+            case 'doc_module': return $osm_app->modules['Osm_Docs_Docs'];
             case 'book': return $this->doc_module->book;
         }
 

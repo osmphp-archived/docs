@@ -21,14 +21,14 @@ use Osm\Framework\Views\JsConfig;
 class Web extends Controller
 {
     protected function default($property) {
-        global $m_app; /* @var App $m_app */
+        global $osm_app; /* @var App $osm_app */
 
         switch ($property) {
-            case 'module': return $m_app->modules['Osm_Docs_Docs'];
+            case 'module': return $osm_app->modules['Osm_Docs_Docs'];
             case 'page': return $this->module->page;
-            case 'responses': return $m_app[Responses::class];
+            case 'responses': return $osm_app[Responses::class];
             case 'book': return $this->module->book;
-            case 'js_config': return $m_app[JsConfig::class];
+            case 'js_config': return $osm_app[JsConfig::class];
         }
         return parent::default($property);
     }

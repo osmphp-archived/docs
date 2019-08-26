@@ -23,10 +23,10 @@ class Module extends BaseModule
     ];
 
     protected function default($property) {
-        global $m_app; /* @var App $m_app */
+        global $osm_app; /* @var App $osm_app */
 
         switch ($property) {
-            case 'tags': return $m_app->cache->remember('doc_tags', function($data) {
+            case 'tags': return $osm_app->cache->remember('doc_tags', function($data) {
                 return Tags::new($data);
             });
         }

@@ -11,15 +11,15 @@ use Osm\Framework\Http\Exceptions\NotFound;
 trait DetectRouteTrait
 {
     protected function around_findController(callable $proceed) {
-        global $m_app; /* @var App $m_app */
+        global $osm_app; /* @var App $osm_app */
 
         try {
             return $proceed();
         }
         catch (NotFound $e) {
-            $bookDetector = $m_app[BookDetector::class]; /* @var BookDetector $bookDetector */
-            $module = $m_app->modules['Osm_Docs_Docs']; /* @var Module $module */
-            $request = $m_app->request;
+            $bookDetector = $osm_app[BookDetector::class]; /* @var BookDetector $bookDetector */
+            $module = $osm_app->modules['Osm_Docs_Docs']; /* @var Module $module */
+            $request = $osm_app->request;
 
             if ($request->method != 'GET') {
                 throw $e;
@@ -39,12 +39,12 @@ trait DetectRouteTrait
 
             if ($page = $book->getPage($filePath, false)) {
                 $module->page = $page;
-                return $m_app->area_->controllers['GET /_books/page'];
+                return $osm_app->area_->controllers['GET /_books/page'];
             }
 
             if ($book->isImage($filePath)) {
                 $module->image = $filePath;
-                return $m_app->area_->controllers['GET /_books/image'];
+                return $osm_app->area_->controllers['GET /_books/image'];
             }
 
             throw $e;

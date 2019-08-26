@@ -20,10 +20,10 @@ use Osm\Core\Object_;
 class TagRenderer extends Object_
 {
      protected function default($property) {
-        global $m_app; /* @var App $m_app */
+        global $osm_app; /* @var App $osm_app */
 
         switch ($property) {
-            case 'module': return $m_app->modules['Osm_Docs_Docs'];
+            case 'module': return $osm_app->modules['Osm_Docs_Docs'];
             case 'book': return $this->module->book;
         }
         return parent::default($property);

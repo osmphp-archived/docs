@@ -92,7 +92,7 @@ class Page extends Object_
     const DESC = 'desc';
 
     protected function default($property) {
-        global $m_app; /* @var App $m_app */
+        global $osm_app; /* @var App $osm_app */
 
         switch ($property) {
             case 'original_title': return $this->getOriginalTitle();
@@ -116,13 +116,13 @@ class Page extends Object_
             case 'child_pages': return $this->getChildPages();
             case 'images': return $this->getImages();
 
-            case 'module': return $m_app->modules['Osm_Docs_Docs'];
+            case 'module': return $osm_app->modules['Osm_Docs_Docs'];
             case 'tags': return $this->module->tags;
-            case 'tag_renderer': return $m_app[TagRenderer::class];
-            case 'type_converter': return $m_app[TypeConverter::class];
+            case 'tag_renderer': return $osm_app[TagRenderer::class];
+            case 'type_converter': return $osm_app[TypeConverter::class];
             case 'book': return $this->module->book;
-            case 'request': return $m_app->request;
-            case 'url_generator': return $m_app->url_generator;
+            case 'request': return $osm_app->request;
+            case 'url_generator': return $osm_app->url_generator;
         }
         return parent::default($property);
     }

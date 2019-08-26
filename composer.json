@@ -1,5 +1,5 @@
 {
-    "name": "dubysa/docs",
+    "name": "osmphp/docs",
     "autoload": {
         "psr-4": {
             "Manadev\\": "src/",
@@ -9,14 +9,14 @@
     },
     "require": {
         "php": ">=7.1",
-        "dubysa/framework": "2.*",
+        "osmphp/framework": "2.*",
         "michelf/php-markdown": "1.8.*"
     },
     "extra": {
         "branch-alias": {
             "dev-master": "2.x-dev"
         },
-        "dubysa": {
+        "osm": {
             "component_pools": {
                 "src": {
                     "module_path": "*/*/Module.php",

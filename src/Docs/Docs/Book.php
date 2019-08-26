@@ -87,7 +87,7 @@ class Book extends Object_
         }
 
         if ($required && (!$this->pages[$url] || $this->pages[$url]->type === Page::REDIRECT)) {
-            throw new NotFound(m_("Page ':name' not found", ['name' => $url]));
+            throw new NotFound(osm_t("Page ':name' not found", ['name' => $url]));
         }
 
         return $this->pages[$url];

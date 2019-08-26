@@ -40,7 +40,7 @@ class Web extends Controller
 
         $this->js_config->book = (object)$this->book->getJsConfig();
 
-        return m_layout('books_page', [
+        return osm_layout('books_page', [
             '#page' => ['title' => $this->page->title],
             '#breadcrumbs' => ['page' => $this->page],
             '#html' => ['page' => $this->page],

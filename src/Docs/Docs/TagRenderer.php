@@ -46,7 +46,7 @@ class TagRenderer extends Object_
             case 'toc': return $this->renderToc();
             case 'child_pages': return $this->renderChildPages();
             default:
-                throw new NotSupported(m_("Tag ':tag' not supported", ['tag' => $tag->name]));
+                throw new NotSupported(osm_t("Tag ':tag' not supported", ['tag' => $tag->name]));
         }
     }
 

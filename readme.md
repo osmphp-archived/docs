@@ -1,4 +1,4 @@
-# `dubysa/docs` #
+# `osmphp/docs` #
 
 **TODO**. Package description
 
@@ -6,6 +6,6 @@
 
 Run the following commands in shell:
 
-    cd dubysa_directory
-    composer config repositories.dubysa_docs vcs git@bitbucket.org:dubysa/docs.git
-    composer require dubysa/docs:2.*
+    cd osmphp_directory
+    composer config repositories.osmphp_docs vcs git@bitbucket.org:osmphp/docs.git
+    composer require osmphp/docs:2.*

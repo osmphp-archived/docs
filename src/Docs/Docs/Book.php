@@ -20,7 +20,7 @@ use Osm\Framework\Http\UrlGenerator;
  * @property Request $request @required
  * @property Cache $cache @required
  *
- * @see \Osm\DocHost\Books\Module:
+ * @see \Osm\Docs\Books\Module:
  *      @property int $id @required @part
  *      @property int $customer @required @part
  */

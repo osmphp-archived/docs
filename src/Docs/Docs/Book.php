@@ -23,6 +23,11 @@ use Osm\Framework\Http\UrlGenerator;
  * @see \Osm\Docs\Books\Module:
  *      @property int $id @required @part
  *      @property int $customer @required @part
+ *      @property string $customer_name
+ *      @property string $name
+ *      @property string $title
+ *      @property string $stored_on
+ *      @property string $repo_url
  */
 class Book extends Object_
 {

@@ -4,19 +4,16 @@ namespace Osm\Docs\Docs\Controllers;
 
 use Osm\Core\App;
 use Osm\Docs\Docs\Book;
-use Osm\Docs\Docs\Hints\JsConfigHint;
 use Osm\Docs\Docs\Page;
 use Osm\Docs\Docs\Module;
 use Osm\Framework\Http\Controller;
 use Osm\Framework\Http\Responses;
-use Osm\Framework\Views\JsConfig;
 
 /**
  * @property Module $module @required
  * @property Page $page @required
  * @property Responses $responses @required
  * @property Book $book @required
- * @property JsConfigHint|JsConfig $js_config @required
  */
 class Web extends Controller
 {
@@ -28,7 +25,6 @@ class Web extends Controller
             case 'page': return $this->module->page;
             case 'responses': return $osm_app[Responses::class];
             case 'book': return $this->module->book;
-            case 'js_config': return $osm_app[JsConfig::class];
         }
         return parent::default($property);
     }
@@ -38,10 +34,13 @@ class Web extends Controller
             return $this->responses->redirect($this->page->redirect_to_url);
         }
 
-        $this->js_config->book = (object)$this->book->getJsConfig();
-
         return osm_layout('books_page', [
-            '#page' => ['title' => $this->page->title],
+            '#page' => [
+                'title' => $this->page->title,
+                'model' => [
+                    'book' => (object)$this->book->getJsConfig(),
+                ],
+            ],
             '#breadcrumbs' => ['page' => $this->page],
             '#html' => ['page' => $this->page],
         ]);

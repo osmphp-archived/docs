@@ -82,7 +82,8 @@ class Page extends Object_
         ' ', '\\', '/',
 
         // characters listed below when found in SEOified text are ignored, i.e. not put into generated URL
-        '`', '"', '\'', '(', ')', '.', ',', '?', '!', '+', '@', ':', '&'
+        '`', '"', '\'', '(', ')', '.', ',', '?', '!', '+', '@', ':', '&', '>',
+        '<',
     ];
     const REPLACEMENTS = ['-', '-', '-'];
 

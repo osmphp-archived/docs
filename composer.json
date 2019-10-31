@@ -2,9 +2,9 @@
     "name": "osmphp/docs",
     "autoload": {
         "psr-4": {
-            "Osm\\": "src/",
-            "Osm\\Tests\\": "tests/",
-            "Osm\\Samples\\": "samples/"
+            "Osm\\Docs\\": "src/",
+            "Osm\\Docs\\Tests\\": "tests/",
+            "Osm\\Docs\\Samples\\": "samples/"
         }
     },
     "require": {
@@ -19,8 +19,8 @@
         "osm": {
             "component_pools": {
                 "src": {
-                    "module_path": "*/*/Module.php",
-                    "theme_path": "*/*/theme.php"
+                    "module_path": "*/Module.php",
+                    "theme_path": "*/theme.php"
                 },
                 "samples": {
                     "module_path": "*/Module.php",

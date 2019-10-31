@@ -62,7 +62,8 @@ class Book extends Object_
     }
 
     public function getPlaceholderText($name) {
-        return "# " . basename($name). " #\n\n{{ child_pages depth=\"1\" }}\n";
+        $name = basename($name) ?: 'index';
+        return "# {$name} #\n\n{{ child_pages depth=\"1\" }}\n";
     }
 
     public function getNewPageText($title) {

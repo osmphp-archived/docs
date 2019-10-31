@@ -17,19 +17,12 @@ trait DetectRouteTrait
             return $proceed();
         }
         catch (NotFound $e) {
-            $bookDetector = $osm_app[BookDetector::class]; /* @var BookDetector $bookDetector */
             $module = $osm_app->modules['Osm_Docs_Docs']; /* @var Module $module */
             $request = $osm_app->request;
 
-            if ($request->method != 'GET') {
+            if (!($book = $module->book)) {
                 throw $e;
             }
-
-            if (!($book = $bookDetector->detectBook())) {
-                throw $e;
-            }
-
-            $module->book = $book;
 
             $filePath = mb_substr($request->route, mb_strlen($book->url_path));
 

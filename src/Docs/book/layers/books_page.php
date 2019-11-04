@@ -6,7 +6,7 @@ use Osm\Framework\Views\Views\Container;
 use Osm\Ui\MenuBars\Views\MenuBar;
 
 return [
-    '@include' => ['base'],
+    '@include' => ['page'],
     '#page' => [
         'modifier' => '-books-page',
         'content' => Container::new([

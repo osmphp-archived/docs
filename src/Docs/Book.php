@@ -253,7 +253,7 @@ class Book extends Object_
             $name .= $this->suffix_;
         }
 
-        return $this->url_generator->rawUrl('GET ' . $this->url_path . $name, $this->request->query);
+        return $this->url_generator->rawUrl("GET {$name}", $this->request->query);
     }
 
     public function isImage($url) {

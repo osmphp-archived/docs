@@ -24,6 +24,8 @@ trait DetectAreaTrait
         }
 
         $osm_app->area = 'book';
+        $request->base_url_path = $module->book->url_path;
+
         return $next();
     }
 }

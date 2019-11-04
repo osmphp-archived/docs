@@ -7,7 +7,7 @@ use Osm\Core\Exceptions\NotFound;
 use Osm\Core\Object_;
 use Osm\Framework\Cache\Cache;
 use Osm\Framework\Http\Request;
-use Osm\Framework\Http\UrlGenerator;
+use Osm\Framework\Http\Url;
 
 /**
  * @property string $file_path @required @part
@@ -16,11 +16,11 @@ use Osm\Framework\Http\UrlGenerator;
  * @property string $cache_tag @required @part
  * @property string $suffix_ @required
  *
- * @property UrlGenerator $url_generator @required
+ * @property Url $url @required
  * @property Request $request @required
  * @property Cache $cache @required
  *
- * @see \Osm\Docs\Books\Module:
+ * @see \App\Books\Module:
  *      @property int $id @required @part
  *      @property int $customer @required @part
  *      @property string $customer_name
@@ -46,7 +46,7 @@ class Book extends Object_
 
         switch ($property) {
             case 'suffix_': return $this->getSuffix();
-            case 'url_generator': return $osm_app[UrlGenerator::class];
+            case 'url': return $osm_app->url;
             case 'request': return $osm_app->request;
             case 'cache': return $osm_app->cache;
             case 'cache_tag': return "book|{$this->url_path}";
@@ -253,7 +253,7 @@ class Book extends Object_
             $name .= $this->suffix_;
         }
 
-        return $this->url_generator->rawUrl("GET {$name}", $this->request->query);
+        return $this->url->to("GET {$name}", $this->request->query);
     }
 
     public function isImage($url) {

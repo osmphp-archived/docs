@@ -6,7 +6,7 @@ use Osm\Core\App;
 use Osm\Core\Object_;
 use Osm\Framework\Http\Request;
 use Michelf\MarkdownExtra;
-use Osm\Framework\Http\UrlGenerator;
+use Osm\Framework\Http\Url;
 
 /**
  * Properties applicable to all page types
@@ -50,7 +50,7 @@ use Osm\Framework\Http\UrlGenerator;
  * @property Tags|Tag[] $tags @required
  * @property TagRenderer $tag_renderer @required
  * @property TypeConverter $type_converter @required
- * @property UrlGenerator $url_generator @required
+ * @property Url $url_ @required
  * @property Request $request @required
  */
 class Page extends Object_
@@ -123,7 +123,7 @@ class Page extends Object_
             case 'type_converter': return $osm_app[TypeConverter::class];
             case 'book': return $this->module->book;
             case 'request': return $osm_app->request;
-            case 'url_generator': return $osm_app->url_generator;
+            case 'url_': return $osm_app->url;
         }
         return parent::default($property);
     }
@@ -160,7 +160,7 @@ class Page extends Object_
                 return $match[0];
             }
 
-            return "[{$match['title']}]({$match['url']}{$this->url_generator->
+            return "[{$match['title']}]({$match['url']}{$this->url_->
                 generateQueryString($this->request->query)})";
         }, $text);
     }

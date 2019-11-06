@@ -6,7 +6,7 @@ use Osm\Core\App;
 use Osm\Docs\Docs\Module;
 use Osm\Framework\Layers\Layout;
 
-trait PageControllerTrait
+trait BookControllerTrait
 {
     protected function around_bookPage(callable $proceed) {
         global $osm_app; /* @var App $osm_app */

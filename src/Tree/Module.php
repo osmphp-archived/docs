@@ -3,7 +3,7 @@
 namespace Osm\Docs\Tree;
 
 use Osm\Core\Modules\BaseModule;
-use Osm\Docs\Docs\Controllers\Web as PageController;
+use Osm\Docs\Docs\Controllers\BookController;
 
 class Module extends BaseModule
 {
@@ -12,6 +12,6 @@ class Module extends BaseModule
     ];
 
     public $traits = [
-        PageController::class => Traits\PageControllerTrait::class,
+        BookController::class => Traits\BookControllerTrait::class,
     ];
 }

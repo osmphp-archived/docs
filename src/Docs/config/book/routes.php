@@ -1,16 +1,16 @@
 <?php
 
-use Osm\Docs\Docs\Controllers\Web;
+use Osm\Docs\Docs\Controllers\BookController;
 
 return [
     'GET /_books/page' => [
-        'class' => Web::class,
+        'class' => BookController::class,
         'method' => 'bookPage',
         'public' => true,
         'abstract' => true,
     ],
     'GET /_books/image' => [
-        'class' => Web::class,
+        'class' => BookController::class,
         'method' => 'image',
         'public' => true,
         'abstract' => true,

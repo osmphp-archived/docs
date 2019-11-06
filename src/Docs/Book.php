@@ -10,13 +10,17 @@ use Osm\Framework\Http\Request;
 use Osm\Framework\Http\Url;
 
 /**
+ * Constructor arguments:
+ *
+ * @property Url $url @required
  * @property string $file_path @required @part
  * @property string $url_path @required @part
  * @property string $suffix @part Typical values: null, '/', 'html', ''
+ *
+ * Dependencies:
+ *
  * @property string $cache_tag @required @part
  * @property string $suffix_ @required
- *
- * @property Url $url @required
  * @property Request $request @required
  * @property Cache $cache @required
  *
@@ -25,9 +29,7 @@ use Osm\Framework\Http\Url;
  *      @property int $customer @required @part
  *      @property string $customer_name
  *      @property string $name
- *      @property string $title
- *      @property string $stored_on
- *      @property string $repo_url
+ *      @property string $domain
  */
 class Book extends Object_
 {
@@ -46,10 +48,9 @@ class Book extends Object_
 
         switch ($property) {
             case 'suffix_': return $this->getSuffix();
-            case 'url': return $osm_app->url;
             case 'request': return $osm_app->request;
             case 'cache': return $osm_app->cache;
-            case 'cache_tag': return "book|{$this->url_path}";
+            case 'cache_tag': return "book|{$this->url->route_base_url_}";
         }
 
         return parent::default($property);
@@ -266,7 +267,6 @@ class Book extends Object_
 
     public function getJsConfig() {
         return [
-            'path' => $this->url_path,
             'suffix' => $this->suffix_,
         ];
     }

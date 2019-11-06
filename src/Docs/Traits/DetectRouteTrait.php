@@ -3,9 +3,7 @@
 namespace Osm\Docs\Docs\Traits;
 
 use Osm\Core\App;
-use Osm\Docs\Docs\Controllers\Web;
 use Osm\Docs\Docs\Module;
-use Osm\Docs\Docs\BookDetector;
 use Osm\Framework\Http\Exceptions\NotFound;
 
 trait DetectRouteTrait
@@ -24,7 +22,7 @@ trait DetectRouteTrait
                 throw $e;
             }
 
-            $filePath = mb_substr($request->route, mb_strlen($book->url_path));
+            $filePath = $request->route;
 
             if (starts_with($filePath, '/.')) {
                 throw $e;

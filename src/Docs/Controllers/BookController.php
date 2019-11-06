@@ -15,7 +15,7 @@ use Osm\Framework\Http\Responses;
  * @property Responses $responses @required
  * @property Book $book @required
  */
-class Web extends Controller
+class BookController extends Controller
 {
     protected function default($property) {
         global $osm_app; /* @var App $osm_app */

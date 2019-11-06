@@ -12,7 +12,7 @@ export default class Page {
 
     get name() {
         if (this._name === undefined) {
-            this._name = this.url.pathname.substr(config.book.path.length);
+            this._name = this.url.pathname.substr(config.base_url);
             if (this._name !== '/') {
                 this._name = this._name.substr(0, this._name.length - config.book.suffix.length);
             }

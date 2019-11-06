@@ -6,6 +6,7 @@ use Osm\Core\App;
 use Osm\Core\Object_;
 use Osm\Docs\Docs\Hints\SettingsHint;
 use Osm\Framework\Http\Request;
+use Osm\Framework\Http\Url;
 use Osm\Framework\Settings\Settings;
 
 /**
@@ -49,8 +50,11 @@ class BookDetector extends Object_
 
         return Book::new([
             'file_path' => $this->file_path,
-            'url_path' => $this->url_path,
             'suffix' => 'html',
+            'url' => Url::new([
+                'area' => 'book',
+                'route_base_url' => $this->url_path,
+            ]),
         ]);
     }
 }

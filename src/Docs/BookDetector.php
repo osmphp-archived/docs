@@ -38,9 +38,9 @@ class BookDetector extends Object_
             return null;
         }
 
-//        if (!is_file("{$this->file_path}/index.md")) {
-//            return null;
-//        }
+        if (!is_file("{$this->file_path}/index.md")) {
+            return null;
+        }
 
         if ($this->url_path &&
             mb_strpos($this->request->route, $this->url_path) !== 0)

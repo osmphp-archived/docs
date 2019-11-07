@@ -2,6 +2,7 @@
 
 use Osm\Docs\Docs\Views\Breadcrumbs;
 use Osm\Docs\Docs\Views\Html;
+use Osm\Framework\Views\View;
 use Osm\Framework\Views\Views\Container;
 use Osm\Ui\MenuBars\Views\MenuBar;
 

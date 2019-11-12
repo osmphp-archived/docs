@@ -24,7 +24,7 @@ class Items extends View
 
         switch ($property) {
             case 'cache': return $osm_app->cache;
-            case 'cache_key': return "{$this->parent->book->cache_tag}|tree_html";
+            case 'cache_key': return "{$this->parent->book->cache_key}|tree_html";
         }
         return parent::default($property);
     }

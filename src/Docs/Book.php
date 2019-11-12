@@ -19,6 +19,7 @@ use Osm\Framework\Http\Url;
  *
  * Dependencies:
  *
+ * @property string $cache_key @required @part
  * @property string $cache_tag @required @part
  * @property string $suffix_ @required
  * @property Request $request @required
@@ -50,7 +51,8 @@ class Book extends Object_
             case 'suffix_': return $this->getSuffix();
             case 'request': return $osm_app->request;
             case 'cache': return $osm_app->cache;
-            case 'cache_tag': return "book|{$this->url->route_base_url_}";
+            case 'cache_key': return "book|{$this->url->route_base_url_}";
+            case 'cache_tag': return "book";
         }
 
         return parent::default($property);

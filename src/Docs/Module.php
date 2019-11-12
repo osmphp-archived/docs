@@ -4,6 +4,7 @@ namespace Osm\Docs\Docs;
 
 use Osm\Core\App;
 use Osm\Core\Modules\BaseModule;
+use Osm\Framework\Gulp\Commands\ConfigGulp;
 use Osm\Framework\Http\Advices\DetectArea;
 use Osm\Framework\Http\Advices\DetectRoute;
 
@@ -22,6 +23,7 @@ class Module extends BaseModule
     public $traits = [
         DetectArea::class => Traits\DetectAreaTrait::class,
         DetectRoute::class => Traits\DetectRouteTrait::class,
+        ConfigGulp::class => Traits\ConfigGulpTrait::class,
     ];
 
     protected function default($property) {

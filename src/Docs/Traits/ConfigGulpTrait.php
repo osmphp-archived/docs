@@ -16,7 +16,7 @@ trait ConfigGulpTrait
         $homeDir = $settings->doc_file_path ?? $osm_app->path('data/book');
 
         $result = $proceed();
-        if (mb_substr(realpath($homeDir), realpath('data')) === 0) {
+        if (mb_strpos(realpath($homeDir), realpath('data')) === 0) {
             return $result;
         }
 

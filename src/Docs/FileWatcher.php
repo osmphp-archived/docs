@@ -36,7 +36,11 @@ class FileWatcher extends BaseFileWatcher
     }
 
     protected function isBookChanged($paths) {
-        $homeDir = realpath($this->file_path);
+        if (!($homeDir = realpath($this->file_path))) {
+            // if book directory doesn't exist, we can't say that
+            // the book is changed
+            return false;
+        }
 
         foreach ($paths as $path) {
             if (mb_strpos(realpath($path), $homeDir) === 0) {

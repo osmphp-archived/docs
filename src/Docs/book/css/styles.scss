@@ -26,7 +26,7 @@
 .html {
   a, code {
     overflow-wrap: break-word;
-    word-break: break-all;
+    word-break: break-word;
   }
 
   code {
@@ -38,14 +38,16 @@
 
   pre {
     background-color: $color--book-page--code-block;
-    color: $color--book-page--on-code-block;
-
+    border: rem(1px) solid $color--book-page--code-block-border;
+    font-size: rem(13px);
+    line-height: rem(19px);
     overflow: auto;
-    padding: rem(15px);
+    padding: rem(6px) rem(10px);
+    border-radius: rem(3px);
 
     code {
       background-color: $color--book-page--code-block;
-      color: $color--book-page--on-code-block;
+      border: none;
       padding: 0;
     }
   }
@@ -57,14 +59,18 @@
   }
 
   blockquote { // TODO
-    border-radius: rem(12px);
-    background: $color--book-page--quote;
+    margin-left: 0;
+    margin-right: 0;
+    border-left: rem(4px) solid $color--book-page--quote-border;
+    padding: rem(8px) rem(15px);
     color: $color--book-page--on-quote;
-    margin: 0 0 rem(15px);
-    padding: rem(1px) rem(1px) rem(1px) rem(10px);
 
-    p {
-      padding-left: rem(15px);
+    & > :first-child {
+      margin-top: 0;
+    }
+
+    & > :last-child {
+      margin-bottom: 0;
     }
   }
 

@@ -11,13 +11,10 @@
     },
     "require": {
         "php": "^7.2",
-        "osmphp/framework": "2.*",
+        "osmphp/framework": "^3.0",
         "michelf/php-markdown": "1.8.*"
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "2.x-dev"
-        },
         "osm": {
             "component_pools": {
                 "src": {

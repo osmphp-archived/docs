@@ -1,6 +1,6 @@
 {
     "name": "osmphp/docs",
-    "description": "Modules showing Markdown files as Web pages. Essential part of self-hosted version of osmdocs.com.",
+    "description": "Markdown book rendering",
     "license": "GPL-3.0-only",
     "autoload": {
         "psr-4": {
@@ -11,7 +11,7 @@
     },
     "require": {
         "php": "^7.2",
-        "osmphp/framework": "v3.x-dev",
+        "osmphp/framework": "^3.1",
         "michelf/php-markdown": "1.8.*"
     },
     "extra": {

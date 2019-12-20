@@ -18,7 +18,7 @@ trait DetectRouteTrait
             $module = $osm_app->modules['Osm_Docs_Docs']; /* @var Module $module */
             $request = $osm_app->request;
 
-            if (!($book = $module->book)) {
+            if (!($book = $module->book ?? null)) {
                 throw $e;
             }
 

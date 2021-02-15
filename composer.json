@@ -11,7 +11,7 @@
     },
     "require": {
         "php": "^7.2",
-        "osmphp/framework": "^3.2",
+        "osmphp/framework": "dev-old_v3",
         "michelf/php-markdown": "1.8.*"
     },
     "extra": {
